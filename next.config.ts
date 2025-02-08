@@ -1,8 +1,6 @@
 import type { NextConfig } from 'next';
 import { RemotePattern } from 'next/dist/shared/lib/image-config';
 
-import { env } from './env.mjs';
-
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const domainImages: RemotePattern[] = process.env.NEXT_PUBLIC_IMAGE_DOMAINS
@@ -40,7 +38,7 @@ const nextConfig: NextConfig = {
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: env.ANALYZE,
+  enabled: process.env.ANALYZE === 'true',
 });
 
-export default env.ANALYZE ? withBundleAnalyzer(nextConfig) : nextConfig;
+export default process.env.ANALYZE === 'true' ? withBundleAnalyzer(nextConfig) : nextConfig;

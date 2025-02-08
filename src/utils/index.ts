@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
-
-import { env } from 'env.mjs';
+import { env } from '@/config';
 
 export function getAssetUrl(src: unknown) {
   if (!env.basePath) return src as string;

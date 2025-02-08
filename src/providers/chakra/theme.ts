@@ -12,14 +12,7 @@ export const system = createSystem(defaultConfig, {
     },
     tokens: {
       colors: {
-        bgMain: { value: 'rgba(0, 0, 0, 1)' },
-        tabColor: { value: '#251d1d' },
-        dark: { value: 'rgba(15, 15, 15, 1)' },
-        borderColor: { value: 'rgba(255, 255, 255, 0.05)' },
-        bgButton: { value: 'rgba(29, 29, 29, 1)' },
-        green: { value: '#00E578' },
-        black: { value: '#000' },
-        red: { value: '#FF3E00' },
+        green: { value: 'rgba(150, 240, 72, 1)' },
       },
     },
   },

@@ -55,7 +55,7 @@ export const ImageRatio = (props: ImageRatioProps) => {
   const handleError = () => setIsError(true);
 
   return (
-    <Box {...rest}>
+    <Box overflow="hidden" {...rest}>
       <AspectRatioWrap ratio={ratio} borderRadius={props.borderRadius}>
         <Skeleton
           position="absolute"

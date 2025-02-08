@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Darker_Grotesque, Work_Sans } from 'next/font/google';
 import { Layout } from '@/views/_components/Layout';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const darkerGrotesque = Darker_Grotesque({
+  variable: '--font-darker-grotesque',
   subsets: ['latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const workSans = Work_Sans({
+  variable: '--font-work-sans',
   subsets: ['latin'],
 });
 
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${darkerGrotesque.variable} ${workSans.variable} font-darker leading-normal antialiased`}>
         <Layout>{children}</Layout>
       </body>
     </html>
