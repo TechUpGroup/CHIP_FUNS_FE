@@ -10,7 +10,13 @@ import { onChangeAmount } from '@/constants';
 
 export default function CoinFlipView() {
   const [amount, setAmount] = useState('');
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isTails, setIsTails] = useState(false);
+  const [userSelectIsTails, setUserSelectIsTails] = useState<boolean>();
+  const [result, setResult] = useState<{
+    isTails: boolean;
+    isWin: boolean;
+    winAmount: number;
+  }>();
   const [isAnimating, setIsAnimating] = useState(false);
   const controls = useAnimation();
 
@@ -27,6 +33,7 @@ export default function CoinFlipView() {
     setIsAnimating(true);
 
     try {
+      setResult(undefined);
       // Reset animation
       await controls.stop();
       await controls.set({ rotateY: 0 });
@@ -66,7 +73,12 @@ export default function CoinFlipView() {
       });
 
       // Update UI based on API result
-      setIsFlipped(result.isHeads);
+      setIsTails(result.isHeads);
+      setResult({
+        isTails: result.isHeads,
+        isWin: result.isWin,
+        winAmount: result.winAmount,
+      });
 
       // Optional: Handle win/loss logic
       if (result.isWin) {
@@ -114,7 +126,7 @@ export default function CoinFlipView() {
             </Box>
           </Flex>
           <motion.div
-            key={`coin-flip-${isFlipped}`}
+            key={`coin-flip-${isTails}`}
             style={{
               // perspective: '1000px',
               width: '314px',
@@ -131,7 +143,7 @@ export default function CoinFlipView() {
               backgroundSize="cover"
               backfaceVisibility="hidden"
               style={{
-                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                transform: isTails ? 'rotateY(180deg)' : 'rotateY(0deg)',
                 transformStyle: 'preserve-3d',
               }}
             />
@@ -143,7 +155,7 @@ export default function CoinFlipView() {
               backgroundSize="cover"
               backfaceVisibility="hidden"
               style={{
-                transform: isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)',
+                transform: isTails ? 'rotateY(0deg)' : 'rotateY(180deg)',
                 transformStyle: 'preserve-3d',
               }}
             />
@@ -157,7 +169,11 @@ export default function CoinFlipView() {
               h={{ base: '40px', md: '50px' }}
               textAlign="center"
             >
-              WIN: 100 $CHIP!
+              {!!result && (
+                <Box color={result.isWin ? 'green' : 'red'}>
+                  {result.isWin ? 'WIN' : 'LOSE -'} {result.winAmount} $CHIP!
+                </Box>
+              )}
             </Box>
           </Box>
         </FlexCol>
@@ -195,8 +211,23 @@ export default function CoinFlipView() {
           >
             <FlexCenter gap={{ base: 2, md: 3, xl: 4, '2xl': 5 }}>
               <Box fontWeight={800}>Select side</Box>
-              <FlipHeadsIcon w={{ base: '60px', md: '40px', xl: '50px', '2xl': '60px' }} />
-              <FlipTailsIcon w={{ base: '60px', md: '40px', xl: '50px', '2xl': '60px' }} />
+              {[
+                { Icon: FlipHeadsIcon, isTails: false },
+                { Icon: FlipTailsIcon, isTails: true },
+              ].map(({ Icon, isTails }, i) => {
+                const isSelected = userSelectIsTails === isTails;
+                return (
+                  <Box
+                    key={i}
+                    onClick={() => setUserSelectIsTails(isTails)}
+                    rounded={999}
+                    border={isSelected ? '3px solid rgba(150, 240, 72, 1)' : undefined}
+                    cursor="pointer"
+                  >
+                    <Icon w={{ base: '60px', md: '40px', xl: '50px', '2xl': '60px' }} />
+                  </Box>
+                );
+              })}
             </FlexCenter>
             <FlexCenter gap={{ base: 2, md: 3, xl: 4, '2xl': 5 }}>
               <Box fontWeight={800}>Bet Amount:</Box>
@@ -229,8 +260,10 @@ export default function CoinFlipView() {
               bg="green"
               rounded={8}
               onClick={handleCoinFlip}
-              disabled={!Number(amount)}
+              disabled={!Number(amount) || userSelectIsTails === undefined}
               w={{ base: 'full', md: 'fit-content' }}
+              loading={isAnimating}
+              loadingText="Flipping..."
             >
               <Box hideBelow="md">Bet</Box>
               <Box hideFrom="md">Flip the coin</Box>

@@ -34,6 +34,7 @@ const eslintConfig = [
   {
     ignores: ['node_modules', '.next'],
     rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
       'tailwindcss/no-custom-classname': 'off',
       'react/react-in-jsx-scope': 'off',
       'testing-library/prefer-screen-queries': 'off',

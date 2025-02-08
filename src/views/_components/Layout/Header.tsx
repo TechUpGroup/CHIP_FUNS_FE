@@ -11,7 +11,8 @@ export const Header = () => {
   return (
     <FlexCenter
       h={{ base: '60px', md: '100px' }}
-      px={{ base: 2.5, md: '60px', lg: '80px', xl: '100px', '2xl': '120px' }}
+      px={{ base: 2.5, md: '20px', lg: '30px', xl: '40px', '2xl': '120px' }}
+      py={2.5}
       bg="bgGame"
       justify="space-between"
     >

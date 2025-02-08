@@ -91,27 +91,14 @@ export default function HomeView() {
         </Box>
       </FlexCenter>
       <SimpleGrid columns={{ base: 3, lg: 4, xl: 5, '2xl': 6 }} gap={5} w="full">
-        {Array.from({ length: 12 }).map((_, index) => (
-          <LinkCustom href="/coin-flip" key={index}>
+        {[
+          { name: 'Coin Flip Game', href: '/coin-flip', image: '/icons/coin-flip.png' },
+          { name: 'Roll Dice Game', href: '/roll-dice', image: '/icons/coin-flip.png' },
+        ].map((e, i) => (
+          <LinkCustom href={e.href} key={i}>
             <AspectRatio ratio={1} w="full">
-              <Box
-                rounded={20}
-                bgImage="url('/icons/coin-flip.png')"
-                bgSize="cover"
-                bgPos="center"
-                bgRepeat="no-repeat"
-              >
-                <Flex
-                  align="end"
-                  justify="center"
-                  rounded={20}
-                  bgImage="url('/icons/coin-flip.png')"
-                  bgSize="cover"
-                  bgPos="center"
-                  bgRepeat="no-repeat"
-                  w="full"
-                  h="full"
-                >
+              <Box rounded={20} bgImage={`url('${e.image}')`} bgSize="cover" bgPos="center" bgRepeat="no-repeat">
+                <Flex align="end" justify="center" w="full" h="full">
                   <Box
                     fontSize={{ base: 14, lg: 16, xl: 18, '2xl': 20 }}
                     fontWeight={800}
@@ -120,7 +107,7 @@ export default function HomeView() {
                     textAlign="center"
                     color="white"
                   >
-                    Coin Flip Game
+                    {e.name}
                   </Box>
                 </Flex>
               </Box>

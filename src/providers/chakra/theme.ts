@@ -16,6 +16,7 @@ export const system = createSystem(defaultConfig, {
         bgGame: { value: 'rgba(30, 33, 39, 1)' },
         green: { value: 'rgba(150, 240, 72, 1)' },
         dark: { value: 'rgba(142, 142, 147, 1)' },
+        red: { value: 'rgba(240, 72, 75, 1)' },
       },
     },
   },

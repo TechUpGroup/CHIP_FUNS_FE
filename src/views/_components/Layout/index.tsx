@@ -9,14 +9,14 @@ import { Header } from './Header';
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Providers>
-      <FlexCol as="main" h="100dvh" w="100dvw" overflow="hidden">
+      <FlexCol as="main" h="100dvh" w="100dvw" overflow="auto" css={scrollbarHiddenStyle}>
         <Header />
         <FlexCol
           flex={1}
-          css={scrollbarHiddenStyle}
-          overflow="auto"
-          alignItems="stretch"
-          px={{ base: 2.5, md: '60px', lg: '80px', xl: '100px', '2xl': '120px' }}
+          // css={scrollbarHiddenStyle}
+          // alignItems="stretch"
+          // overflow="auto"
+          px={{ base: 2.5, md: '20px', lg: '20px', xl: '30px', '2xl': '120px' }}
         >
           {children}
         </FlexCol>

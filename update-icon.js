@@ -16,6 +16,7 @@ const replaceString = [
   ['xlink:href', 'xlinkHref'],
   ['xmlns:xlink', 'xmlnsXlink'],
   ['style="mask-type:alpha"', `style={{ maskType: 'alpha' }}`],
+  ['style="mask-type:luminance"', `style={{ maskType: 'luminance' }}`],
 ];
 const options = {
   files: ['./src/components/Icons/**.tsx', './src/components/Icons/**/**.tsx'],
