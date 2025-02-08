@@ -12,7 +12,10 @@ export const system = createSystem(defaultConfig, {
     },
     tokens: {
       colors: {
+        bgMain: { value: 'rgba(21, 24, 29, 1)' },
+        bgGame: { value: 'rgba(30, 33, 39, 1)' },
         green: { value: 'rgba(150, 240, 72, 1)' },
+        dark: { value: 'rgba(142, 142, 147, 1)' },
       },
     },
   },

@@ -3,6 +3,8 @@ export * from './BannerRight';
 export * from './ChipsIcon';
 export * from './CopiedIcon';
 export * from './CopyIcon';
+export * from './FlipHeadsIcon';
+export * from './FlipTailsIcon';
 export * from './GameIcon';
 export * from './LogoCoinFlip';
 export * from './LogoIcon';

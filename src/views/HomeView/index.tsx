@@ -5,7 +5,9 @@ import { Button } from '@/components/Button';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowLink, BannerRight, ChipsIcon, GameIcon, LogoCoinFlip, TransactionIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
+import { LinkCustom } from '@/components/LinkCustom';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
+
 const items = [
   { id: 1, name: 'Laptop', category: 'Electronics', price: 999.99 },
   { id: 2, name: 'Coffee Maker', category: 'Home Appliances', price: 49.99 },
@@ -15,7 +17,7 @@ const items = [
 ];
 export default function HomeView() {
   return (
-    <FlexCol pt={4} w="full" flex={1} px={{ base: 5, md: '60px', lg: '80px', xl: '100px', '2xl': '120px' }} pb={10}>
+    <FlexCol pt={4} w="full" flex={1} pb={10}>
       <Flex gap="1.04%" flexDirection={{ base: 'column', md: 'row' }}>
         <Flex w={{ base: '100%', md: '64.16%' }} gap="1.58%">
           <LogoCoinFlip w="64.93%" />
@@ -90,32 +92,40 @@ export default function HomeView() {
       </FlexCenter>
       <SimpleGrid columns={{ base: 3, lg: 4, xl: 5, '2xl': 6 }} gap={5} w="full">
         {Array.from({ length: 12 }).map((_, index) => (
-          <AspectRatio key={index} ratio={1} w="full">
-            <Box rounded={20} bgImage="url('/icons/coin-flip.png')" bgSize="cover" bgPos="center" bgRepeat="no-repeat">
-              <Flex
-                align="end"
-                justify="center"
+          <LinkCustom href="/coin-flip" key={index}>
+            <AspectRatio ratio={1} w="full">
+              <Box
                 rounded={20}
                 bgImage="url('/icons/coin-flip.png')"
                 bgSize="cover"
                 bgPos="center"
                 bgRepeat="no-repeat"
-                w="full"
-                h="full"
               >
-                <Box
-                  fontSize={{ base: 14, lg: 16, xl: 18, '2xl': 20 }}
-                  fontWeight={800}
-                  lineHeight={1}
-                  pb={{ base: 2, md: 3 }}
-                  textAlign="center"
-                  color="white"
+                <Flex
+                  align="end"
+                  justify="center"
+                  rounded={20}
+                  bgImage="url('/icons/coin-flip.png')"
+                  bgSize="cover"
+                  bgPos="center"
+                  bgRepeat="no-repeat"
+                  w="full"
+                  h="full"
                 >
-                  Coin Flip Game
-                </Box>
-              </Flex>
-            </Box>
-          </AspectRatio>
+                  <Box
+                    fontSize={{ base: 14, lg: 16, xl: 18, '2xl': 20 }}
+                    fontWeight={800}
+                    lineHeight={1}
+                    pb={{ base: 2, md: 3 }}
+                    textAlign="center"
+                    color="white"
+                  >
+                    Coin Flip Game
+                  </Box>
+                </Flex>
+              </Box>
+            </AspectRatio>
+          </LinkCustom>
         ))}
       </SimpleGrid>
       <FlexCenter gap="14px" pt={{ base: 10, md: '96px' }} pb={{ base: 5, md: 6 }}>
@@ -125,7 +135,7 @@ export default function HomeView() {
         </Box>
       </FlexCenter>
 
-      <Box w="full" overflowX="auto" css={scrollbarStyle} bg="rgba(30, 33, 39, 1)" color="white" rounded={10}>
+      <Box w="full" overflowX="auto" css={scrollbarStyle} bg="bgGame" color="white" rounded={10}>
         <Table.Root size="sm">
           <Table.Header>
             <Table.Row bg="unset">
@@ -136,7 +146,7 @@ export default function HomeView() {
                   lineHeight={1.4}
                   p={5}
                   fontWeight={700}
-                  color="rgba(142, 142, 147, 1)"
+                  color="dark"
                   minW={180}
                 >
                   {text}
