@@ -11,17 +11,22 @@ const ClipboardIcon = React.forwardRef<HTMLDivElement, ChakraClipboard.Indicator
     return (
       <ChakraClipboard.Indicator
         copied={
-          <FlexCenter gap={1.5}>
-            <CopiedIcon />
-            <Box fontSize={12} lineHeight={1} className="font-karan opacity-50" fontWeight="normal">
-              COPIED
+          <FlexCenter gap={2}>
+            <Box fontSize={16} lineHeight={1} color="green">
+              Copied
             </Box>
+            <CopiedIcon />
           </FlexCenter>
         }
         {...props}
         ref={ref}
       >
-        <CopyIcon />
+        <FlexCenter gap={2}>
+          <Box fontSize={16} lineHeight={1} color="green">
+            Copy
+          </Box>
+          <CopyIcon />
+        </FlexCenter>
       </ChakraClipboard.Indicator>
     );
   },

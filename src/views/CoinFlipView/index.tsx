@@ -2,21 +2,28 @@
 
 import { Box, chakra, Flex } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/Button';
+import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ChipsIcon, FlipHeadsIcon, FlipTailsIcon } from '@/components/Icons';
 import { onChangeAmount } from '@/constants';
+import { postFlipsAction } from '@/services/flips';
+import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
+import { toastError } from '@/utils/toast';
 
 export default function CoinFlipView() {
   const [amount, setAmount] = useState('');
   const [isTails, setIsTails] = useState(false);
   const [userSelectIsTails, setUserSelectIsTails] = useState<boolean>();
+  const user = useUser();
+  const userBalance = useUserBalance();
   const [result, setResult] = useState<{
-    isTails: boolean;
     isWin: boolean;
     winAmount: number;
+    betAmount: number;
   }>();
+
   const [isAnimating, setIsAnimating] = useState(false);
   const controls = useAnimation();
 
@@ -48,21 +55,19 @@ export default function CoinFlipView() {
         },
       });
 
-      // const result = await response.json();
-      const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-      await sleep(2_000);
-      const result = {
-        isHeads: true,
-        isWin: true,
-        winAmount: 100,
-      };
+      const result = await postFlipsAction({
+        head_tail: userSelectIsTails ? 'TAILS' : 'HEADS',
+        bet_amount: Number(amount) * 10 ** 6,
+      });
+      const isWin = result.flip.is_win;
 
       // Stop the spinning animation
       await controls.stop();
-
+      await controls.set({ rotateY: 0 });
+      const resIsTails = userSelectIsTails === isWin;
       // Determine final rotation based on API result
-      const finalRotation = result.isHeads ? 180 * 5 : 180 * 6;
-
+      const numberRotation = resIsTails !== isTails ? 5 : 6;
+      const finalRotation = 180 * numberRotation;
       // Animate to final position
       await controls.start({
         rotateY: finalRotation,
@@ -72,29 +77,25 @@ export default function CoinFlipView() {
         },
       });
 
-      // Update UI based on API result
-      setIsTails(result.isHeads);
-      setResult({
-        isTails: result.isHeads,
-        isWin: result.isWin,
-        winAmount: result.winAmount,
-      });
+      setIsTails(resIsTails);
 
-      // Optional: Handle win/loss logic
-      if (result.isWin) {
-        // Show win notification or update balance
-        console.log('You won!', result.winAmount);
-      } else {
-        // Show loss notification
-        console.log('You lost!');
-      }
+      setResult({
+        isWin: result.flip.is_win,
+        winAmount: result.flip.reward,
+        betAmount: result.flip.bet_amount,
+      });
+      updateUserInfo(result.user);
     } catch (error) {
       console.error('Coin flip error:', error);
-      // Optional: Show error to user
+      toastError('Coin flip failed', error);
     } finally {
       setIsAnimating(false);
     }
   };
+
+  const isNotEnoughBalance = useMemo(() => {
+    return userBalance.lte(0) || userBalance.lt(Number(amount));
+  }, [userBalance, amount]);
 
   return (
     <Box px={{ base: 0, md: 2.5 }} pb={{ base: '42px', md: '134px' }}>
@@ -143,7 +144,7 @@ export default function CoinFlipView() {
               backgroundSize="cover"
               backfaceVisibility="hidden"
               style={{
-                transform: isTails ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                transform: isTails ? 'rotateY(0deg)' : 'rotateY(180deg)',
                 transformStyle: 'preserve-3d',
               }}
             />
@@ -155,7 +156,7 @@ export default function CoinFlipView() {
               backgroundSize="cover"
               backfaceVisibility="hidden"
               style={{
-                transform: isTails ? 'rotateY(0deg)' : 'rotateY(180deg)',
+                transform: isTails ? 'rotateY(180deg)' : 'rotateY(0deg)',
                 transformStyle: 'preserve-3d',
               }}
             />
@@ -171,7 +172,8 @@ export default function CoinFlipView() {
             >
               {!!result && (
                 <Box color={result.isWin ? 'green' : 'red'}>
-                  {result.isWin ? 'WIN' : 'LOSE -'} {result.winAmount} $CHIP!
+                  {result.isWin ? 'WIN' : 'LOSE -'}{' '}
+                  <Currency value={result.isWin ? result.winAmount : result.betAmount} isWei /> $CHIP!
                 </Box>
               )}
             </Box>
@@ -193,10 +195,11 @@ export default function CoinFlipView() {
                 BALANCE
               </Box>
               <Box fontSize={{ base: 30, md: 28, xl: 32, '2xl': 40 }} fontWeight={800}>
-                12,356 $CHIP
+                <Currency value={user?.balance} isWei /> $CHIP
               </Box>
             </FlexCol>
           </FlexCenter>
+
           <FlexCenter
             flex={1}
             gap={3}
@@ -260,7 +263,7 @@ export default function CoinFlipView() {
               bg="green"
               rounded={8}
               onClick={handleCoinFlip}
-              disabled={!Number(amount) || userSelectIsTails === undefined}
+              disabled={isNotEnoughBalance || !Number(amount) || userSelectIsTails === undefined}
               w={{ base: 'full', md: 'fit-content' }}
               loading={isAnimating}
               loadingText="Flipping..."
