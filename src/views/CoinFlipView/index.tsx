@@ -100,7 +100,7 @@ export default function CoinFlipView() {
   }, [userBalance, amount]);
 
   return (
-    <Box px={{ base: 0, md: 2.5 }} pb={{ base: '42px', md: '134px' }}>
+    <Box px={{ base: 0, md: 2.5 }} pb={{ base: 10, md: 10 }}>
       <FlexCol
         bg="bgGame"
         mt={5}
@@ -252,7 +252,7 @@ export default function CoinFlipView() {
                   onChange={(e) => onChangeAmount(e, setAmount)}
                   inputMode="decimal"
                   pr={2}
-                  pl={{ base: '70px', md: '60px', xl: '70px', '2xl': 74 }}
+                  pl={{ base: '80px', md: '70px', xl: '70px', '2xl': '80px' }}
                 />
               </Box>
             </FlexCenter>
@@ -265,7 +265,7 @@ export default function CoinFlipView() {
               bg="green"
               rounded={8}
               onClick={handleCoinFlip}
-              disabled={isNotEnoughBalance || !Number(amount) || userSelectIsTails === undefined}
+              disabled={!user || isNotEnoughBalance || !Number(amount) || userSelectIsTails === undefined}
               w={{ base: 'full', md: 'fit-content' }}
               loading={isAnimating}
               loadingText="Flipping..."

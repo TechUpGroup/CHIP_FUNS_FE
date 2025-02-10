@@ -1,5 +1,5 @@
 import RollDiceView from '@/views/RollDiceView';
 
-export default function Home() {
+export default function RollDicePage() {
   return <RollDiceView />;
 }

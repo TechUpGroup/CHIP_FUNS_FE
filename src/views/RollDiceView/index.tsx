@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Center, chakra, Flex } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
@@ -9,10 +9,13 @@ import { ArrowUp, ChipsIcon, DotIcon } from '@/components/Icons';
 import { onChangeAmount } from '@/constants';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { postDiceAction } from '@/services/dice';
+import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
 import { toastError } from '@/utils/toast';
 
 export default function RollDiceView() {
+  const user = useUser();
   const [amount, setAmount] = useState('');
+  const userBalance = useUserBalance();
   const [userSelectOver, setUserSelectOver] = useState<boolean>();
   const [numberDot, setNumberDot] = useState(3);
   const [dice1, setDice1] = useState(1);
@@ -24,6 +27,10 @@ export default function RollDiceView() {
     winAmount: number;
     betAmount: number;
   }>();
+
+  const isNotEnoughBalance = useMemo(() => {
+    return userBalance.lte(0) || userBalance.lt(Number(amount));
+  }, [userBalance, amount]);
 
   const rollDice = async () => {
     if (isRolling) return;
@@ -73,6 +80,7 @@ export default function RollDiceView() {
         winAmount: result.dice.reward,
         betAmount: result.dice.bet_amount,
       });
+      updateUserInfo(result.user);
     } catch (error) {
       console.error('Roll dice error:', error);
       toastError('Roll dice failed', error);
@@ -144,7 +152,7 @@ export default function RollDiceView() {
   };
 
   return (
-    <Box px={{ base: 0, md: 2.5 }} pb={{ base: '42px', md: '114px' }}>
+    <Box px={{ base: 0, md: 2.5 }} pb={{ base: 10 }}>
       <FlexCol
         bg="bgGame"
         mt={5}
@@ -195,7 +203,7 @@ export default function RollDiceView() {
                 BALANCE
               </Box>
               <Box fontSize={{ base: 30, md: 28, xl: 32, '2xl': 40 }} fontWeight={800}>
-                12,356 {SYMBOL_TOKEN}
+                <Currency value={user?.balance} isWei /> {SYMBOL_TOKEN}
               </Box>
             </FlexCol>
           </FlexCenter>
@@ -295,13 +303,13 @@ export default function RollDiceView() {
                   onChange={(e) => onChangeAmount(e, setAmount)}
                   inputMode="decimal"
                   pr={2}
-                  pl={{ base: '70px', md: '60px', xl: '70px', '2xl': 74 }}
+                  pl={{ base: '80px', md: '70px', xl: '70px', '2xl': '80px' }}
                 />
               </Box>
             </FlexCenter>
             <Button
               onClick={rollDice}
-              disabled={isRolling || !Number(amount) || userSelectOver === undefined}
+              disabled={isNotEnoughBalance || !user || isRolling || !Number(amount) || userSelectOver === undefined}
               minW={142}
               w={{ base: 'full', md: 'fit-content' }}
               h={10}

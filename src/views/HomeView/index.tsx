@@ -99,6 +99,7 @@ export default function HomeView() {
         {[
           { name: 'Coin Flip Game', href: '/coin-flip', image: '/icons/coin-flip.png' },
           { name: 'Roll Dice Game', href: '/roll-dice', image: '/icons/coin-flip.png' },
+          { name: 'Hilo Game', href: '/hilo', image: '/icons/coin-flip.png' },
         ].map((e, i) => (
           <LinkCustom href={e.href} key={i}>
             <AspectRatio ratio={1} w="full">

@@ -20,7 +20,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonBaseProps>(function Co
       ref={ref}
       transition="all .3s linear"
       cursor="pointer"
-      fontWeight={500}
       // _hover={{
       //   opacity: 1,
       // }}

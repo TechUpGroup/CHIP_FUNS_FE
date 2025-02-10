@@ -17,14 +17,22 @@ const replaceString = [
   ['xmlns:xlink', 'xmlnsXlink'],
   ['style="mask-type:alpha"', `style={{ maskType: 'alpha' }}`],
   ['style="mask-type:luminance"', `style={{ maskType: 'luminance' }}`],
+  ['export const \w+', `export const `],
 ];
-const options = {
-  files: ['./src/components/Icons/**.tsx', './src/components/Icons/**/**.tsx'],
-  from: replaceString.map((x) => new RegExp(x[0], 'g')),
-  to: replaceString.map((x) => x[1]),
-};
 
 async function replaceSvg() {
+  const { basename } = await import('path');
+  const options = {
+    files: ['./src/components/Icons/**.tsx', './src/components/Icons/**/**.tsx'],
+    from: [...replaceString.map((x) => new RegExp(x[0], 'g')), new RegExp('export const \\w+', 'g')],
+    to: [
+      ...replaceString.map((x) => x[1]),
+      (...args) => {
+        const filename = basename(args[3], '.tsx');
+        return `export const ${filename}`;
+      },
+    ],
+  };
   // replace svg
   try {
     const replace = await import('replace-in-file');

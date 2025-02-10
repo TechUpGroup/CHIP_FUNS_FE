@@ -7,6 +7,7 @@ import { Layout } from '@/views/_components/Layout';
 const darkerGrotesque = Darker_Grotesque({
   variable: '--font-darker-grotesque',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
 });
 
 const workSans = Work_Sans({
