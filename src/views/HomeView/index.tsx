@@ -1,18 +1,18 @@
 'use client';
 
 import { AspectRatio, Box, Flex, SimpleGrid, Table } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import { Button } from '@/components/Button';
+import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowLink, BannerRight, ChipsIcon, GameIcon, LogoCoinFlip, TransactionIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { LinkCustom } from '@/components/LinkCustom';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import { getGameNoti } from '@/services/user';
-import { scrollbarStyle } from '@/utils/styles/scrollbar';
-import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { formatAddress } from '@/utils/address';
-import dayjs from 'dayjs';
-import { Currency } from '@/components/Currency';
+import { scrollbarStyle } from '@/utils/styles/scrollbar';
 
 export default function HomeView() {
   const { data: noti } = useBaseQuery({

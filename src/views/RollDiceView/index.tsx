@@ -1,51 +1,85 @@
 'use client';
 
 import { Box, Center, chakra, Flex } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/Button';
+import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowUp, ChipsIcon, DotIcon } from '@/components/Icons';
 import { onChangeAmount } from '@/constants';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
+import { postDiceAction } from '@/services/dice';
+import { toastError } from '@/utils/toast';
 
 export default function RollDiceView() {
   const [amount, setAmount] = useState('');
   const [userSelectOver, setUserSelectOver] = useState<boolean>();
-  const [numberDot, setNumberDot] = useState(1);
-  const [dice1, setDice1] = useState(6);
-  const [dice2, setDice2] = useState(5);
+  const [numberDot, setNumberDot] = useState(3);
+  const [dice1, setDice1] = useState(1);
+  const [dice2, setDice2] = useState(1);
   const [isRolling, setIsRolling] = useState(false);
+  const intervalId = useRef<NodeJS.Timeout>(null);
+  const [result, setResult] = useState<{
+    isWin: boolean;
+    winAmount: number;
+    betAmount: number;
+  }>();
 
-  const rollDice = () => {
+  const rollDice = async () => {
     if (isRolling) return;
 
-    setIsRolling(true);
+    // Validate bet amount
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      toastError('Invalid bet amount');
+      return;
+    }
+    let isStop = false;
+    try {
+      setIsRolling(true);
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
+      }
 
-    // Simulate dice rolling animation
-    const rollAnimationDuration = 1000; // 1 second
-    const animationSteps = 10;
+      // let steps = 0;
+      intervalId.current = setInterval(() => {
+        if (isStop) {
+          if (intervalId.current) {
+            clearInterval(intervalId.current);
+            intervalId.current = null;
+          }
+          return;
+        }
 
-    const animateRoll = () => {
-      let steps = 0;
-      const intervalId = setInterval(() => {
         // Randomly change dice values during animation
         setDice1(Math.floor(Math.random() * 6) + 1);
         setDice2(Math.floor(Math.random() * 6) + 1);
+      }, 50);
 
-        steps++;
-
-        if (steps >= animationSteps) {
-          clearInterval(intervalId);
-
-          // Final dice values
-          setDice1(Math.floor(Math.random() * 6) + 1);
-          setDice2(Math.floor(Math.random() * 6) + 1);
-          setIsRolling(false);
-        }
-      }, rollAnimationDuration / animationSteps);
-    };
-
-    animateRoll();
+      const result = await postDiceAction({
+        bet: userSelectOver ? 'high' : 'low',
+        bet_amount: Number(amount) * 10 ** 6,
+        bet_number: numberDot,
+      });
+      console.log(result.dice.result_dice);
+      const isWin = result.dice.is_win;
+      isStop = true;
+      // Final dice values
+      setDice1(result.dice.result_dice[0]);
+      setDice2(result.dice.result_dice[1]);
+      setResult({
+        isWin,
+        winAmount: result.dice.reward,
+        betAmount: result.dice.bet_amount,
+      });
+    } catch (error) {
+      console.error('Roll dice error:', error);
+      toastError('Roll dice failed', error);
+    } finally {
+      setIsRolling(false);
+      isStop = true;
+    }
   };
 
   const renderDice = (value: number) => {
@@ -137,7 +171,12 @@ export default function RollDiceView() {
             h={{ base: '40px', md: '50px' }}
             textAlign="center"
           >
-            WIN: 100 {SYMBOL_TOKEN}!
+            {!!result && (
+              <Box color={result.isWin ? 'green' : 'red'}>
+                {result.isWin ? 'WIN' : 'LOSE -'}{' '}
+                <Currency value={result.isWin ? result.winAmount : result.betAmount} isWei /> {SYMBOL_TOKEN}!
+              </Box>
+            )}
           </Box>
         </FlexCol>
         <Flex gap={{ base: 2.5, md: 5 }} w="full" flexDir={{ base: 'column', md: 'row' }}>
@@ -231,7 +270,7 @@ export default function RollDiceView() {
                   h={10}
                   rounded={8}
                   onClick={() => setNumberDot((s) => s - 1)}
-                  disabled={numberDot === 1}
+                  disabled={numberDot === 3}
                 >
                   <ArrowUp transform="rotate(180deg)" />
                 </Button>

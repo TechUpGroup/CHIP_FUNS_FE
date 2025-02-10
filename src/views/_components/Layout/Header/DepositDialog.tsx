@@ -14,11 +14,11 @@ import {
 } from '@/components/ui';
 import { env } from '@/config';
 import { onChangeAmount } from '@/constants';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useSolanaBalanceToken } from '@/hooks/solana';
 import { useSignRawTransaction } from '@/hooks/solana/useSignRawTransaction';
 import { postUsersDeposit } from '@/services/user';
 import { toastError, toastSuccess } from '@/utils/toast';
-import { SYMBOL_TOKEN } from '@/enums/token.enum';
 
 export const DepositDialog = () => {
   const [address, setAddress] = useState('');

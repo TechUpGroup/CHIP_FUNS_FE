@@ -8,10 +8,10 @@ import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ChipsIcon, FlipHeadsIcon, FlipTailsIcon } from '@/components/Icons';
 import { onChangeAmount } from '@/constants';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { postFlipsAction } from '@/services/flips';
 import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
 import { toastError } from '@/utils/toast';
-import { SYMBOL_TOKEN } from '@/enums/token.enum';
 
 export default function CoinFlipView() {
   console.log('render CoinFlipView');
@@ -35,7 +35,7 @@ export default function CoinFlipView() {
     // Validate bet amount
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      // Optional: Add error handling for invalid bet amount
+      toastError('Invalid bet amount');
       return;
     }
 
