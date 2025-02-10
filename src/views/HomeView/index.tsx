@@ -1,13 +1,15 @@
 'use client';
 
-import { AspectRatio, Box, Flex, SimpleGrid, Table } from '@chakra-ui/react';
+import { Box, Flex, SimpleGrid, Table } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import { Absolute } from '@/components/Absolute';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowLink, BannerRight, ChipsIcon, GameIcon, LogoCoinFlip, TransactionIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { LinkCustom } from '@/components/LinkCustom';
+import { gameImages } from '@/constants/game.constant';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import { getGameNoti } from '@/services/user';
@@ -97,27 +99,26 @@ export default function HomeView() {
       </FlexCenter>
       <SimpleGrid columns={{ base: 3, lg: 4, xl: 5, '2xl': 6 }} gap={5} w="full">
         {[
-          { name: 'Coin Flip Game', href: '/coin-flip', image: '/icons/coin-flip.png' },
-          { name: 'Roll Dice Game', href: '/roll-dice', image: '/icons/coin-flip.png' },
-          { name: 'Hilo Game', href: '/hilo', image: '/icons/coin-flip.png' },
+          { name: 'Coin Flip Game', href: '/coin-flip', image: '/games/flip.png' },
+          { name: 'Roll Dice', href: '/roll-dice', image: '/games/dice.png' },
+          { name: 'Hilo', href: '/hilo', image: '/games/hilo.png' },
         ].map((e, i) => (
           <LinkCustom href={e.href} key={i}>
-            <AspectRatio ratio={1} w="full">
-              <Box rounded={20} bgImage={`url('${e.image}')`} bgSize="cover" bgPos="center" bgRepeat="no-repeat">
-                <Flex align="end" justify="center" w="full" h="full">
-                  <Box
-                    fontSize={{ base: 14, lg: 16, xl: 18, '2xl': 20 }}
-                    fontWeight={800}
-                    lineHeight={1}
-                    pb={{ base: 2, md: 3 }}
-                    textAlign="center"
-                    color="white"
-                  >
-                    {e.name}
-                  </Box>
-                </Flex>
-              </Box>
-            </AspectRatio>
+            <Box pos="relative" w="full">
+              <ImageRatio src={e.image} ratio={1} w="full" rounded={20} />
+              <Absolute display="flex" alignItems="end" justifyContent="center" w="full" h="full">
+                <Box
+                  fontSize={{ base: 14, lg: 16, xl: 18, '2xl': 20 }}
+                  fontWeight={800}
+                  lineHeight={1}
+                  pb={{ base: 2, md: 3 }}
+                  textAlign="center"
+                  color="white"
+                >
+                  {e.name}
+                </Box>
+              </Absolute>
+            </Box>
           </LinkCustom>
         ))}
       </SimpleGrid>
@@ -152,15 +153,7 @@ export default function HomeView() {
               <Table.Row key={i} bg="unset">
                 <Table.Cell px={5} pb={6} pt={0}>
                   <FlexCenter gap={1.5} flex="1 0 0">
-                    <AspectRatio ratio={1} w={{ base: 6, md: 10 }}>
-                      <Box
-                        rounded={4}
-                        bgImage="url('/icons/coin-flip.png')"
-                        bgSize="cover"
-                        bgPos="center"
-                        bgRepeat="no-repeat"
-                      />
-                    </AspectRatio>
+                    <ImageRatio src={gameImages[item.game] ?? ''} ratio={1} w={{ base: 6, md: 10 }} rounded={4} />
                     <Box>{item.game}</Box>
                   </FlexCenter>
                 </Table.Cell>
