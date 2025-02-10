@@ -6,16 +6,21 @@ import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowLink, BannerRight, ChipsIcon, GameIcon, LogoCoinFlip, TransactionIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { LinkCustom } from '@/components/LinkCustom';
+import { useBaseQuery } from '@/hooks/useBaseQuery';
+import { getGameNoti } from '@/services/user';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
+import { formatAddress } from '@/utils/address';
+import dayjs from 'dayjs';
+import { Currency } from '@/components/Currency';
 
-const items = [
-  { id: 1, name: 'Laptop', category: 'Electronics', price: 999.99 },
-  { id: 2, name: 'Coffee Maker', category: 'Home Appliances', price: 49.99 },
-  { id: 3, name: 'Desk Chair', category: 'Furniture', price: 150.0 },
-  { id: 4, name: 'Smartphone', category: 'Electronics', price: 799.99 },
-  { id: 5, name: 'Headphones', category: 'Accessories', price: 199.99 },
-];
 export default function HomeView() {
+  const { data: noti } = useBaseQuery({
+    queryKey: ['home'],
+    queryFn: getGameNoti,
+    refetchInterval: 5_000,
+  });
+
   return (
     <FlexCol pt={4} w="full" flex={1} pb={10}>
       <Flex gap="1.04%" flexDirection={{ base: 'column', md: 'row' }}>
@@ -122,7 +127,7 @@ export default function HomeView() {
         </Box>
       </FlexCenter>
 
-      <Box w="full" overflowX="auto" css={scrollbarStyle} bg="bgGame" color="white" rounded={10}>
+      <Box w="full" overflow="auto" maxH="500px" css={scrollbarStyle} bg="bgGame" color="white" rounded={10}>
         <Table.Root size="sm">
           <Table.Header>
             <Table.Row bg="unset">
@@ -142,8 +147,8 @@ export default function HomeView() {
             </Table.Row>
           </Table.Header>
           <Table.Body fontSize={{ base: 12, md: 20 }} lineHeight={1} fontWeight={800}>
-            {items.map((item) => (
-              <Table.Row key={item.id} bg="unset">
+            {noti?.map((item, i) => (
+              <Table.Row key={i} bg="unset">
                 <Table.Cell px={5} pb={6} pt={0}>
                   <FlexCenter gap={1.5} flex="1 0 0">
                     <AspectRatio ratio={1} w={{ base: 6, md: 10 }}>
@@ -155,30 +160,36 @@ export default function HomeView() {
                         bgRepeat="no-repeat"
                       />
                     </AspectRatio>
-                    <Box>Coin Flip Game</Box>
+                    <Box>{item.game}</Box>
                   </FlexCenter>
                 </Table.Cell>
                 <Table.Cell px={5} pb={6} pt={0}>
                   <FlexCenter gap={1.5}>
-                    <ImageRatio src="/icons/coin-flip.png" ratio={1} w={6} rounded={999} />
-                    <Box>Savannah Nguyen</Box>
+                    {/* <ImageRatio src="/icons/coin-flip.png" ratio={1} w={6} rounded={999} /> */}
+                    <Box>{formatAddress(item.username)}</Box>
                   </FlexCenter>
                 </Table.Cell>
+
                 <Table.Cell px={5} pb={6} pt={0}>
                   <FlexCenter gap={1.5}>
-                    <Box>14:45 PM</Box>
-                  </FlexCenter>
-                </Table.Cell>
-                <Table.Cell px={5} pb={6} pt={0}>
-                  <FlexCenter gap={1.5}>
-                    <ChipsIcon />
-                    <Box>30.00 $CHIP</Box>
+                    <Box>{dayjs(item.timestamp).format('hh:mm A')}</Box>
                   </FlexCenter>
                 </Table.Cell>
                 <Table.Cell px={5} pb={6} pt={0}>
                   <FlexCenter gap={1.5}>
                     <ChipsIcon />
-                    <Box color="green">30.00 $CHIP</Box>
+                    <Box>
+                      <Currency value={item.bet_amount} isWei /> {SYMBOL_TOKEN}
+                    </Box>
+                  </FlexCenter>
+                </Table.Cell>
+
+                <Table.Cell px={5} pb={6} pt={0}>
+                  <FlexCenter gap={1.5}>
+                    <ChipsIcon />
+                    <Box color={item.isWin ? 'green' : 'red'}>
+                      <Currency value={item.reward} isWei /> {SYMBOL_TOKEN}
+                    </Box>
                   </FlexCenter>
                 </Table.Cell>
               </Table.Row>

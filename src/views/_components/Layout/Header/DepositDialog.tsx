@@ -18,6 +18,7 @@ import { useSolanaBalanceToken } from '@/hooks/solana';
 import { useSignRawTransaction } from '@/hooks/solana/useSignRawTransaction';
 import { postUsersDeposit } from '@/services/user';
 import { toastError, toastSuccess } from '@/utils/toast';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 
 export const DepositDialog = () => {
   const [address, setAddress] = useState('');
@@ -84,7 +85,7 @@ export const DepositDialog = () => {
                 </Box>
                 <Box pos="relative" fontWeight={600} flex={1}>
                   <Box pos="absolute" color="dark" top="50%" transform="translateY(-50%)" left={3}>
-                    $CHIP
+                    {SYMBOL_TOKEN}
                   </Box>
                   <chakra.input
                     w="full"
@@ -103,7 +104,7 @@ export const DepositDialog = () => {
                   />
                 </Box>
                 <Box fontSize={14} color="rgba(174, 174, 178, 1)">
-                  (Balance: <Currency value={balance?.amount} isWei /> $CHIP)
+                  (Balance: <Currency value={balance?.amount} isWei /> {SYMBOL_TOKEN})
                 </Box>
               </FlexCol>
             </FlexCol>

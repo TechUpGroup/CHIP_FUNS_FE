@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui';
 import { onChangeAmount } from '@/constants';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useSignRawTransaction } from '@/hooks/solana/useSignRawTransaction';
 import { postUsersWithdraw } from '@/services/user';
 import { useUser } from '@/store/useUserStore';
@@ -95,7 +96,7 @@ export const WithdrawDialog = () => {
                 </Box>
                 <Box pos="relative" fontWeight={600} flex={1}>
                   <Box pos="absolute" color="dark" top="50%" transform="translateY(-50%)" left={3}>
-                    $CHIP
+                    {SYMBOL_TOKEN}
                   </Box>
                   <chakra.input
                     w="full"
@@ -114,7 +115,7 @@ export const WithdrawDialog = () => {
                   />
                 </Box>
                 <Box fontSize={14} color="rgba(174, 174, 178, 1)">
-                  (Balance: <Currency value={user?.balance} isWei /> $CHIP)
+                  (Balance: <Currency value={user?.balance} isWei /> {SYMBOL_TOKEN})
                 </Box>
               </FlexCol>
             </FlexCol>

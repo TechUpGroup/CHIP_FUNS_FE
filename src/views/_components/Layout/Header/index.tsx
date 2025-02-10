@@ -13,6 +13,7 @@ import useAuth from '@/hooks/useAuth';
 import { useUser } from '@/store/useUserStore';
 import { DepositDialog } from './DepositDialog';
 import { WithdrawDialog } from './WithdrawDialog';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 
 export const Header = () => {
   const { setVisible } = useWalletModal();
@@ -57,7 +58,7 @@ export const Header = () => {
             <FlexCenter flex={1} gap={2}>
               <ChipsIcon w={{ base: 6, md: 8 }} />
               <Box fontSize={{ base: 14, md: 20 }} lineHeight={1} fontWeight={800} color="white">
-                <Currency value={user?.balance} isWei /> $CHIP
+                <Currency value={user?.balance} isWei /> {SYMBOL_TOKEN}
               </Box>
             </FlexCenter>
 

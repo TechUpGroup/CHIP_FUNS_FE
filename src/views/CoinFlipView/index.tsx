@@ -11,8 +11,10 @@ import { onChangeAmount } from '@/constants';
 import { postFlipsAction } from '@/services/flips';
 import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
 import { toastError } from '@/utils/toast';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 
 export default function CoinFlipView() {
+  console.log('render CoinFlipView');
   const [amount, setAmount] = useState('');
   const [isTails, setIsTails] = useState(false);
   const [userSelectIsTails, setUserSelectIsTails] = useState<boolean>();
@@ -173,7 +175,7 @@ export default function CoinFlipView() {
               {!!result && (
                 <Box color={result.isWin ? 'green' : 'red'}>
                   {result.isWin ? 'WIN' : 'LOSE -'}{' '}
-                  <Currency value={result.isWin ? result.winAmount : result.betAmount} isWei /> $CHIP!
+                  <Currency value={result.isWin ? result.winAmount : result.betAmount} isWei /> {SYMBOL_TOKEN}!
                 </Box>
               )}
             </Box>
@@ -195,7 +197,7 @@ export default function CoinFlipView() {
                 BALANCE
               </Box>
               <Box fontSize={{ base: 30, md: 28, xl: 32, '2xl': 40 }} fontWeight={800}>
-                <Currency value={user?.balance} isWei /> $CHIP
+                <Currency value={user?.balance} isWei /> {SYMBOL_TOKEN}
               </Box>
             </FlexCol>
           </FlexCenter>
@@ -236,7 +238,7 @@ export default function CoinFlipView() {
               <Box fontWeight={800}>Bet Amount:</Box>
               <Box pos="relative" fontWeight={600} flex={1}>
                 <Box pos="absolute" color="dark" top="50%" transform="translateY(-50%)" left={3}>
-                  $CHIP
+                  {SYMBOL_TOKEN}
                 </Box>
                 <chakra.input
                   w="full"

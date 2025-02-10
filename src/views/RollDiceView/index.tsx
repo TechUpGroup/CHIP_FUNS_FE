@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowUp, ChipsIcon, DotIcon } from '@/components/Icons';
 import { onChangeAmount } from '@/constants';
+import { SYMBOL_TOKEN } from '@/enums/token.enum';
 
 export default function RollDiceView() {
   const [amount, setAmount] = useState('');
@@ -136,7 +137,7 @@ export default function RollDiceView() {
             h={{ base: '40px', md: '50px' }}
             textAlign="center"
           >
-            WIN: 100 $CHIP!
+            WIN: 100 {SYMBOL_TOKEN}!
           </Box>
         </FlexCol>
         <Flex gap={{ base: 2.5, md: 5 }} w="full" flexDir={{ base: 'column', md: 'row' }}>
@@ -155,7 +156,7 @@ export default function RollDiceView() {
                 BALANCE
               </Box>
               <Box fontSize={{ base: 30, md: 28, xl: 32, '2xl': 40 }} fontWeight={800}>
-                12,356 $CHIP
+                12,356 {SYMBOL_TOKEN}
               </Box>
             </FlexCol>
           </FlexCenter>
@@ -241,7 +242,7 @@ export default function RollDiceView() {
 
               <Box pos="relative" fontWeight={600} flex={1}>
                 <Box pos="absolute" color="dark" top="50%" transform="translateY(-50%)" left={3}>
-                  $CHIP
+                  {SYMBOL_TOKEN}
                 </Box>
                 <chakra.input
                   w="full"
