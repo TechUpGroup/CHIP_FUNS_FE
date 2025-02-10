@@ -21,7 +21,7 @@ RUN yarn build
 # ==================================
 FROM base
 
-COPY ./next.config.mjs ./
+# COPY ./next.config.mjs ./
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
