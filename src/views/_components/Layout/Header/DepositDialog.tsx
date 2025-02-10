@@ -79,9 +79,11 @@ export const DepositDialog = () => {
                   rounded={10}
                   placeholder="Enter public address"
                   value={address}
+                  disabled
                   // onChange={(e) => setAddress(e.target.value)}
                 />
               </FlexCol>
+
               <FlexCol gap={2.5}>
                 <Box fontSize={18} fontWeight={800}>
                   Amount
