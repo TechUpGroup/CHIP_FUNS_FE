@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, chakra, Flex } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { Absolute } from '@/components/Absolute';
 import { Button } from '@/components/Button';
@@ -17,14 +18,15 @@ import { toastError } from '@/utils/toast';
 
 export default function HiloGameView() {
   const user = useUser();
+
   const [amount, setAmount] = useState('');
   const [isPlaying, setIsPlaying] = useState(false);
   const [result, setResult] = useState<{
     isWin: boolean;
     winAmount: number;
     betAmount: number;
-    resultCard: string;
   }>();
+  const [resultCard, setResultCard] = useState<string>();
 
   const {
     data: dataNewGame,
@@ -43,31 +45,36 @@ export default function HiloGameView() {
     return userBalance.lte(0) || userBalance.lt(Number(amount));
   }, [userBalance, amount]);
 
-  const SystemCard = useMemo(
-    () => (!isFetching && dataNewGame ? allCard[dataNewGame.bet_card] : BackCard),
-    [isFetching, dataNewGame],
-  );
-  const CardResult = useMemo(() => (result ? allCard[result.resultCard] : BackCard), [result]);
+  const SystemCard = useMemo(() => (dataNewGame ? allCard[dataNewGame.bet_card] : BackCard), [dataNewGame]);
+
+  const CardResult = useMemo(() => (resultCard ? allCard[resultCard] : BackCard), [resultCard]);
   const handlePlayGame = async (isHigh: boolean) => {
     try {
       setLoading(true);
+
       const result = await postHiloAction({
         bet: isHigh ? 'high or equal' : 'low or equal',
         bet_amount: Number(amount) * 10 ** 6,
       });
+
       const isWin = result.card.is_win;
       setResult({
         isWin,
         winAmount: result.card.reward,
         betAmount: result.card.bet_amount,
-        resultCard: result.card.result_card,
       });
+      setResultCard(result.card.result_card);
       updateUserInfo(result.user);
+
       setTimeout(() => {
-        refetch();
         setIsPlaying(false);
         setResult(undefined);
-      }, 3_000);
+
+        // delay for animation
+        setTimeout(() => {
+          refetch();
+        }, 500);
+      }, 2_500);
     } catch (error) {
       toastError('Create new game failed!', error);
       console.log(error);
@@ -92,28 +99,66 @@ export default function HiloGameView() {
       >
         <FlexCol align="center" w="full">
           <FlexCenter gap={{ base: 6, md: '58px' }} w="full" justify="center" align="center" pt={{ base: 10, md: 0 }}>
-            <SystemCard w={{ base: '150px', md: '234px' }} />
+            <Box pos="relative">
+              <BackCard w={{ base: '150px', md: '234px' }} visibility="hidden" />
+              <motion.div
+                className="absolute left-0 top-0 z-10 size-full"
+                key={dataNewGame?.bet_card}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+                initial={{ x: 292, y: -15, scale: 0.87 }}
+                animate={{ x: 0, y: 0, scale: 1 }}
+              >
+                <motion.div
+                  className="absolute left-0 top-0 size-full"
+                  style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+                  initial={{ rotateY: 0 }}
+                  animate={{ rotateY: 180 }}
+                  transition={{ duration: 0.6, ease: 'easeOut', delay: 0.8 }}
+                >
+                  <Absolute backfaceVisibility="hidden" transform="rotateY(0deg)">
+                    <BackCard w="full" />
+                  </Absolute>
+                  <Absolute backfaceVisibility="hidden" transform="rotateY(180deg)">
+                    <SystemCard w="full" />
+                  </Absolute>
+                </motion.div>
+              </motion.div>
+            </Box>
+
             <Box pt={2.5}>
               <Box pos="relative">
                 <BackCard w={{ base: '150px', md: '234px' }} scale={0.87} />
-                <Box pos="absolute" top={-2.5} left={0} scale={0.87}>
-                  <BackCard w={{ base: '150px', md: '234px' }} />
+                <Box pos="absolute" top={-2.5} left={0}>
+                  <BackCard w={{ base: '150px', md: '234px' }} scale={0.87} />
                 </Box>
                 <Box pos="absolute" top={-5} left={0} scale={0.87}>
-                  <CardResult w={{ base: '150px', md: '234px' }} />
-                  {result && (
-                    <Absolute
-                      rounded={12}
-                      bg={result.isWin ? 'rgba(0, 227, 15, 0.2)' : 'rgba(255, 0, 0, 0.2)'}
-                      border="3px solid"
-                      borderColor={result.isWin ? 'rgba(0, 227, 15, 1)' : 'rgba(255, 0, 0, 1)'}
-                    />
-                  )}
+                  <BackCard w={{ base: '150px', md: '234px' }} visibility="hidden" />
+                  <Absolute
+                    transition="transform 0.6s"
+                    transformStyle="preserve-3d"
+                    perspective="1000px"
+                    transform={`rotateY(${!result ? '180deg' : '0deg'})`}
+                  >
+                    <Absolute backfaceVisibility="hidden" transform="rotateY(0deg)">
+                      <CardResult w="full" />
+                      {result && (
+                        <Absolute
+                          rounded={12}
+                          bg={result.isWin ? 'rgba(0, 227, 15, 0.2)' : 'rgba(255, 0, 0, 0.2)'}
+                          border="3px solid"
+                          borderColor={result.isWin ? 'rgba(0, 227, 15, 1)' : 'rgba(255, 0, 0, 1)'}
+                        />
+                      )}
+                    </Absolute>
+                    <Absolute backfaceVisibility="hidden" transform="rotateY(180deg)">
+                      <BackCard w="full" />
+                    </Absolute>
+                  </Absolute>
                 </Box>
               </Box>
             </Box>
           </FlexCenter>
-          <Box h={{ base: 100, md: '178px' }}>
+          <Flex h={{ base: 100, md: '178px' }} w="full" justify="center">
             {result ? (
               <Box
                 pt={{ base: 10, md: 14 }}
@@ -121,6 +166,7 @@ export default function HiloGameView() {
                 fontWeight={800}
                 fontSize={{ base: 40, md: 50 }}
                 textAlign="center"
+                w="full"
               >
                 {result.isWin ? 'WIN' : 'LOSE -'}{' '}
                 <Currency value={result.isWin ? result.winAmount : result.betAmount} isWei /> {SYMBOL_TOKEN}!
@@ -170,7 +216,7 @@ export default function HiloGameView() {
                 </Button>
               </FlexCenter>
             )}
-          </Box>
+          </Flex>
         </FlexCol>
         <Flex gap={{ base: 2.5, md: 5 }} w="full" flexDir={{ base: 'column', md: 'row' }}>
           <FlexCenter
