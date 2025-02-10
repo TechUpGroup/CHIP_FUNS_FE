@@ -37,6 +37,7 @@ export default function HiloGameView() {
     queryKey: ['hilo-new-game'],
     queryFn: postHiloNewGame,
     enabled: !!user,
+    gcTime: 1,
   });
 
   const [loading, setLoading] = useState(false);
@@ -101,28 +102,30 @@ export default function HiloGameView() {
           <FlexCenter gap={{ base: 6, md: '58px' }} w="full" justify="center" align="center" pt={{ base: 10, md: 0 }}>
             <Box pos="relative">
               <BackCard w={{ base: '150px', md: '234px' }} visibility="hidden" />
-              <motion.div
-                className="absolute left-0 top-0 z-10 size-full"
-                key={dataNewGame?.bet_card}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
-                initial={{ x: 292, y: -15, scale: 0.87 }}
-                animate={{ x: 0, y: 0, scale: 1 }}
-              >
+              {!!dataNewGame && (
                 <motion.div
-                  className="absolute left-0 top-0 size-full"
-                  style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
-                  initial={{ rotateY: 0 }}
-                  animate={{ rotateY: 180 }}
-                  transition={{ duration: 0.6, ease: 'easeOut', delay: 0.8 }}
+                  className="absolute left-0 top-0 z-10 size-full"
+                  key={dataNewGame?.bet_card}
+                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                  initial={{ x: 292, y: -15, scale: 0.87 }}
+                  animate={{ x: 0, y: 0, scale: 1 }}
                 >
-                  <Absolute backfaceVisibility="hidden" transform="rotateY(0deg)">
-                    <BackCard w="full" />
-                  </Absolute>
-                  <Absolute backfaceVisibility="hidden" transform="rotateY(180deg)">
-                    <SystemCard w="full" />
-                  </Absolute>
+                  <motion.div
+                    className="absolute left-0 top-0 size-full"
+                    style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+                    initial={{ rotateY: 0 }}
+                    animate={{ rotateY: 180 }}
+                    transition={{ duration: 0.6, ease: 'easeOut', delay: 0.8 }}
+                  >
+                    <Absolute backfaceVisibility="hidden" transform="rotateY(0deg)">
+                      <BackCard w="full" />
+                    </Absolute>
+                    <Absolute backfaceVisibility="hidden" transform="rotateY(180deg)">
+                      <SystemCard w="full" />
+                    </Absolute>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
+              )}
             </Box>
 
             <Box pt={2.5}>
