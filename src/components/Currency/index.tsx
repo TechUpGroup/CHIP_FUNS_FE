@@ -110,7 +110,7 @@ export const Currency: FC<Props> = (props) => {
   if (!isRounded && !props.rounded) return <>{valueShow}</>;
   return (
     <Tooltip content={fullValue}>
-      <div>{valueShow}</div>
+      <div className="inline-block">{valueShow}</div>
     </Tooltip>
   );
 };

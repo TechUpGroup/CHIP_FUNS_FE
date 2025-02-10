@@ -4,6 +4,6 @@ export const env = {
   isSolanaMainnet: process.env.NEXT_PUBLIC_IS_SOLANA_MAINNET?.trim().toLowerCase() === 'true',
 
   address: {
-    token: 'HiEWJhkSTTQe6Uzjv2APNG659xygGKgsTTEbsZzA2Aq',
+    token: '8zs9HZswm7oCzB6Nbs3KdVv9UuQ1LTgYpZ518KnExxJK',
   },
 };
