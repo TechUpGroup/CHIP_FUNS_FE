@@ -74,7 +74,7 @@ export const DepositDialog = () => {
                   bg="white"
                   color="black"
                   rounded={10}
-                  placeholder="Enter public address (0x)"
+                  placeholder="Enter public address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
