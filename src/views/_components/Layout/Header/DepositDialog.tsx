@@ -18,10 +18,13 @@ import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useSolanaBalanceToken } from '@/hooks/solana';
 import { useSignRawTransaction } from '@/hooks/solana/useSignRawTransaction';
 import { postUsersDeposit } from '@/services/user';
+import { useUser } from '@/store/useUserStore';
 import { toastError, toastSuccess } from '@/utils/toast';
 
 export const DepositDialog = () => {
-  const [address, setAddress] = useState('');
+  // const [address, setAddress] = useState('');
+  const user = useUser();
+  const address = useMemo(() => user?.account_deposit ?? '', [user]);
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const signRawTransaction = useSignRawTransaction();
@@ -34,7 +37,7 @@ export const DepositDialog = () => {
       setLoading(true);
       const rawTxs = await postUsersDeposit({ address, amount: Number(amount) });
       await signRawTransaction(rawTxs);
-      setAddress('');
+      // setAddress('');
       setAmount('');
       onClose();
       toastSuccess('Deposit success');
@@ -76,7 +79,7 @@ export const DepositDialog = () => {
                   rounded={10}
                   placeholder="Enter public address"
                   value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  // onChange={(e) => setAddress(e.target.value)}
                 />
               </FlexCol>
               <FlexCol gap={2.5}>
@@ -100,7 +103,7 @@ export const DepositDialog = () => {
                     onChange={(e) => onChangeAmount(e, setAmount)}
                     inputMode="decimal"
                     pr={2}
-                    pl={'52px'}
+                    pl={'60px'}
                   />
                 </Box>
                 <Box fontSize={14} color="rgba(174, 174, 178, 1)">

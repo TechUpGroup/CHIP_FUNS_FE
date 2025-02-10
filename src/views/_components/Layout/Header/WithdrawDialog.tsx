@@ -111,7 +111,7 @@ export const WithdrawDialog = () => {
                     onChange={(e) => onChangeAmount(e, setAmount)}
                     inputMode="decimal"
                     pr={2}
-                    pl={'52px'}
+                    pl={'60px'}
                   />
                 </Box>
                 <Box fontSize={14} color="rgba(174, 174, 178, 1)">
