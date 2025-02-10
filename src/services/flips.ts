@@ -17,3 +17,7 @@ export const postFlipsAction = async (body: { head_tail: 'HEADS' | 'TAILS'; bet_
   }>(`/flips/action`, body);
   return data.data;
 };
+export const getFlipsHistory = async () => {
+  const data = await axiosInstance.get<{ total_head: number; total_tail: number }>(`/flips/history`);
+  return data.data;
+};

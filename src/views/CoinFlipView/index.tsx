@@ -9,7 +9,8 @@ import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ChipsIcon, FlipHeadsIcon, FlipTailsIcon } from '@/components/Icons';
 import { onChangeAmount } from '@/constants';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
-import { postFlipsAction } from '@/services/flips';
+import { useBaseQuery } from '@/hooks/useBaseQuery';
+import { getFlipsHistory, postFlipsAction } from '@/services/flips';
 import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
 import { toastError } from '@/utils/toast';
 
@@ -19,6 +20,11 @@ export default function CoinFlipView() {
   const [isTails, setIsTails] = useState(false);
   const [userSelectIsTails, setUserSelectIsTails] = useState<boolean>();
   const user = useUser();
+  const { data, refetch } = useBaseQuery({
+    queryKey: ['getFlipsHistory'],
+    queryFn: getFlipsHistory,
+    enabled: !!user,
+  });
   const userBalance = useUserBalance();
   const [result, setResult] = useState<{
     isWin: boolean;
@@ -87,6 +93,7 @@ export default function CoinFlipView() {
         betAmount: result.flip.bet_amount,
       });
       updateUserInfo(result.user);
+      refetch();
     } catch (error) {
       console.error('Coin flip error:', error);
       toastError('Coin flip failed', error);
@@ -122,10 +129,16 @@ export default function CoinFlipView() {
             pt={{ base: 10, md: 0 }}
           >
             <Box>
-              Heads: <b>2</b>
+              Heads:{' '}
+              <b>
+                <Currency value={data?.total_head} />
+              </b>
             </Box>
             <Box>
-              Tails: <b>6</b>
+              Tails:{' '}
+              <b>
+                <Currency value={data?.total_tail} />
+              </b>
             </Box>
           </Flex>
           <motion.div
@@ -257,7 +270,6 @@ export default function CoinFlipView() {
               </Box>
             </FlexCenter>
             <Button
-              px={57}
               h={10}
               color="black"
               fontSize={20}
@@ -266,7 +278,7 @@ export default function CoinFlipView() {
               rounded={8}
               onClick={handleCoinFlip}
               disabled={!user || isNotEnoughBalance || !Number(amount) || userSelectIsTails === undefined}
-              w={{ base: 'full', md: 'fit-content' }}
+              w={{ base: 'full', md: '140px' }}
               loading={isAnimating}
               loadingText="Flipping..."
             >

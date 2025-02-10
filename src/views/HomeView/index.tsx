@@ -180,7 +180,7 @@ export default function HomeView() {
                   <FlexCenter gap={1.5}>
                     <ChipsIcon />
                     <Box>
-                      <Currency value={item.bet_amount} isWei /> {SYMBOL_TOKEN}
+                      <Currency value={item.bet_amount} /> {SYMBOL_TOKEN}
                     </Box>
                   </FlexCenter>
                 </Table.Cell>
@@ -188,8 +188,8 @@ export default function HomeView() {
                 <Table.Cell px={5} pb={6} pt={0}>
                   <FlexCenter gap={1.5}>
                     <ChipsIcon />
-                    <Box color={item.isWin ? 'green' : 'red'}>
-                      <Currency value={item.reward} isWei /> {SYMBOL_TOKEN}
+                    <Box color={item.isWin ? 'green' : 'rgba(142, 142, 147, 1)'}>
+                      <Currency value={item.reward} /> {SYMBOL_TOKEN}
                     </Box>
                   </FlexCenter>
                 </Table.Cell>
