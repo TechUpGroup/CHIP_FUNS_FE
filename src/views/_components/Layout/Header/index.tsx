@@ -40,7 +40,8 @@ export const Header = () => {
       {!publicKey ? (
         <Button
           onClick={() => setVisible(true)}
-          disabled={buttonState === 'connecting' || buttonState === 'connected'}
+          disabled={buttonState === 'connected'}
+          loading={buttonState === 'connecting'}
           h={{ base: 8, md: 12 }}
           bg="green"
           px={{ base: 2, md: '26px' }}

@@ -2,7 +2,7 @@
 
 import { Box, Center, chakra, Flex } from '@chakra-ui/react';
 import { useMemo, useRef, useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button, ButtonWithAuth } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowUp, ChipsIcon, DotIcon } from '@/components/Icons';
@@ -307,7 +307,7 @@ export default function RollDiceView() {
                 />
               </Box>
             </FlexCenter>
-            <Button
+            <ButtonWithAuth
               onClick={rollDice}
               disabled={isNotEnoughBalance || !user || isRolling || !Number(amount) || userSelectOver === undefined}
               minW={142}
@@ -320,7 +320,7 @@ export default function RollDiceView() {
               rounded={8}
             >
               {isRolling ? 'Rolling...' : 'Roll'}
-            </Button>
+            </ButtonWithAuth>
           </FlexCenter>
         </Flex>
       </FlexCol>

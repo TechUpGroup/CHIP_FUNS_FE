@@ -1,7 +1,7 @@
 import { Box, chakra, useDisclosure } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
 import { useMemo, useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button, ButtonWithAuth } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCol } from '@/components/Flex';
 import {
@@ -121,7 +121,7 @@ export const WithdrawDialog = () => {
             </FlexCol>
           </DialogBody>
           <DialogFooter px={5} py={4} pt={0}>
-            <Button
+            <ButtonWithAuth
               bg="green"
               fontSize={16}
               fontWeight={600}
@@ -134,7 +134,7 @@ export const WithdrawDialog = () => {
               disabled={!address || !Number(amount) || isNotEnoughBalance}
             >
               Send
-            </Button>
+            </ButtonWithAuth>
           </DialogFooter>
           <DialogCloseTrigger />
         </DialogContent>

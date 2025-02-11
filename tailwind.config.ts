@@ -1,6 +1,9 @@
 import type { Config } from 'tailwindcss';
 
 export default {
+  corePlugins: {
+    preflight: false, // Tắt hoàn toàn CSS reset
+  },
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {

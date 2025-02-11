@@ -3,7 +3,7 @@
 import { Box, chakra, Flex } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import { useMemo, useState } from 'react';
-import { Button } from '@/components/Button';
+import { ButtonWithAuth } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ChipsIcon, FlipHeadsIcon, FlipTailsIcon } from '@/components/Icons';
@@ -269,7 +269,7 @@ export default function CoinFlipView() {
                 />
               </Box>
             </FlexCenter>
-            <Button
+            <ButtonWithAuth
               h={10}
               color="black"
               fontSize={20}
@@ -284,7 +284,7 @@ export default function CoinFlipView() {
             >
               <Box hideBelow="md">Bet</Box>
               <Box hideFrom="md">Flip the coin</Box>
-            </Button>
+            </ButtonWithAuth>
           </FlexCenter>
         </Flex>
       </FlexCol>

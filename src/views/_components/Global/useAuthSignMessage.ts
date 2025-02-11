@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react';
 import useAuth from '@/hooks/useAuth';
 import useWalletAddress from '@/hooks/useWalletAddress';
 import { getNonce, postLogin } from '@/services/api';
-import useListUserStore, { useListUserShallow } from '@/store/useListUserStore';
+import useListUserStore, { addUserToList } from '@/store/useListUserStore';
 import { useUserShallow } from '@/store/useUserStore';
 
 export function useAuthSignMessage() {
@@ -19,7 +19,6 @@ export function useAuthSignMessage() {
   const { logout } = useAuth();
 
   const setUser = useUserShallow((s) => s.setUser);
-  const addUserToList = useListUserShallow((s) => s.addUserToList);
   const listUser = useListUserStore((s) => s.listUser);
 
   useEffect(() => {
@@ -30,6 +29,11 @@ export function useAuthSignMessage() {
         const findUser = listUser.find((e) => e.user.address.toLowerCase() === address.toLowerCase());
         if (findUser) {
           setUser(findUser);
+          return;
+        }
+
+        // remove below code
+        if (1 === 1) {
           return;
         }
 
@@ -54,7 +58,7 @@ export function useAuthSignMessage() {
       }
     };
     updateAuth();
-  }, [addUserToList, address, listUser, logout, setUser, signMessage]);
+  }, [address, listUser, logout, setUser, signMessage]);
 
   return null;
 }

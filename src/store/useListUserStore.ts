@@ -58,3 +58,5 @@ const useListUserStore = createWithEqualityFn<ListUserState>()(
 export default useListUserStore;
 
 export const useListUserShallow = <U>(selector: (state: ListUserState) => U) => useListUserStore(useShallow(selector));
+
+export const { addUserToList, updateUserInfoToList, clearUserToList } = useListUserStore.getState();

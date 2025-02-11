@@ -4,7 +4,7 @@ import { Box, chakra, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { Absolute } from '@/components/Absolute';
-import { Button } from '@/components/Button';
+import { Button, ButtonWithAuth } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ArrowGameUp, BackCard, CardIcon, ChipsIcon, ReloadIcon } from '@/components/Icons';
@@ -183,7 +183,7 @@ export default function HiloGameView() {
                 rounded={8}
                 gap={2.5}
                 mt={8}
-                disabled={!dataNewGame || isFetching}
+                disabled={!dataNewGame || isFetching || !user}
                 onClick={() => refetch()}
               >
                 <ReloadIcon />
@@ -277,7 +277,7 @@ export default function HiloGameView() {
                 />
               </Box>
             </FlexCenter>
-            <Button
+            <ButtonWithAuth
               onClick={() => setIsPlaying(true)}
               disabled={
                 isNotEnoughBalance ||
@@ -299,7 +299,7 @@ export default function HiloGameView() {
               rounded={8}
             >
               Bet
-            </Button>
+            </ButtonWithAuth>
           </FlexCenter>
         </Flex>
       </FlexCol>
