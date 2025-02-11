@@ -1,1 +1,1 @@
-export const SYMBOL_TOKEN = '$SCHIP';
+export const SYMBOL_TOKEN = '$CHIPS';
