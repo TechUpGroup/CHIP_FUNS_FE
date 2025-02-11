@@ -17,7 +17,6 @@ const replaceString = [
   ['xmlns:xlink', 'xmlnsXlink'],
   ['style="mask-type:alpha"', `style={{ maskType: 'alpha' }}`],
   ['style="mask-type:luminance"', `style={{ maskType: 'luminance' }}`],
-  ['export const \w+', `export const `],
 ];
 
 async function replaceSvg() {
