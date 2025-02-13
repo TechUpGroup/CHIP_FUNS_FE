@@ -12,6 +12,7 @@ import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import { getFlipsHistory, postFlipsAction } from '@/services/flips';
 import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
+import { playSound } from '@/utils/sounds';
 import { toastError } from '@/utils/toast';
 
 export default function CoinFlipView() {
@@ -46,7 +47,7 @@ export default function CoinFlipView() {
     }
 
     setIsAnimating(true);
-
+    playSound('coinFlip');
     try {
       setResult(undefined);
       // Reset animation

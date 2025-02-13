@@ -10,6 +10,7 @@ import { onChangeAmount } from '@/constants';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { postDiceAction } from '@/services/dice';
 import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
+import { playSound } from '@/utils/sounds';
 import { toastError } from '@/utils/toast';
 
 export default function RollDiceView() {
@@ -44,6 +45,7 @@ export default function RollDiceView() {
     let isStop = false;
     try {
       setIsRolling(true);
+      playSound('dice');
       if (intervalId.current) {
         clearInterval(intervalId.current);
         intervalId.current = null;

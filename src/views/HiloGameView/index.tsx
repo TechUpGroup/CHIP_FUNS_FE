@@ -2,7 +2,7 @@
 
 import { Box, chakra, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Absolute } from '@/components/Absolute';
 import { Button, ButtonWithAuth } from '@/components/Button';
 import { Currency } from '@/components/Currency';
@@ -14,6 +14,7 @@ import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import { postHiloAction, postHiloNewGame } from '@/services/hilo';
 import { updateUserInfo, useUser, useUserBalance } from '@/store/useUserStore';
+import { playSound } from '@/utils/sounds';
 import { toastError } from '@/utils/toast';
 
 export default function HiloGameView() {
@@ -40,6 +41,12 @@ export default function HiloGameView() {
     gcTime: 1,
   });
 
+  useEffect(() => {
+    if (dataNewGame) {
+      playSound('flipcard');
+    }
+  }, [dataNewGame]);
+
   const [loading, setLoading] = useState(false);
   const userBalance = useUserBalance();
   const isNotEnoughBalance = useMemo(() => {
@@ -52,12 +59,11 @@ export default function HiloGameView() {
   const handlePlayGame = async (isHigh: boolean) => {
     try {
       setLoading(true);
-
       const result = await postHiloAction({
         bet: isHigh ? 'high or equal' : 'low or equal',
         bet_amount: Number(amount) * 10 ** 6,
       });
-
+      playSound('flipcard');
       const isWin = result.card.is_win;
       setResult({
         isWin,

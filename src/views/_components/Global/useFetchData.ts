@@ -7,10 +7,15 @@ import { getAccountInfo } from '@/services/api';
 import useGlobalStore from '@/store/useGlobalStore';
 import useListUserStore from '@/store/useListUserStore';
 import useUserStore from '@/store/useUserStore';
+import { initSounds } from '@/utils/sounds';
 
 export function useFetchData() {
   const updateUserInfo = useUserStore((s) => s.updateUserInfo);
   const updateUserInfoToList = useListUserStore((s) => s.updateUserInfoToList);
+
+  useEffect(() => {
+    initSounds();
+  }, []);
 
   const count = useGlobalStore((state) => state.count);
   const { address } = useWalletActive();
