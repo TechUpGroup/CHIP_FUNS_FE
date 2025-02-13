@@ -1,7 +1,8 @@
-import { Transaction } from '@solana/web3.js';
+import { RpcResponseAndContext, SignatureStatus, Transaction } from '@solana/web3.js';
 import { useCallback } from 'react';
 
 import { useAnchorProvider } from '@/hooks/solana/useAnchorProvider';
+import { sleep } from '@/utils';
 
 export const useSignRawTransaction = () => {
   const anchorProvider = useAnchorProvider();
@@ -18,17 +19,31 @@ export const useSignRawTransaction = () => {
         preflightCommitment: 'confirmed',
         maxRetries: 50,
       });
-      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('confirmed');
-      const confirmedTx = await connection.confirmTransaction(
-        {
-          blockhash,
-          lastValidBlockHeight,
-          signature,
-        },
-        'confirmed',
-      );
-
-      if (!!confirmedTx.value.err) {
+      let result: RpcResponseAndContext<SignatureStatus | null> | null = null;
+      let isSuccess = false;
+      let retryCount = 0;
+      while (!isSuccess && retryCount < 50) {
+        result = await connection.getSignatureStatus(signature, {
+          searchTransactionHistory: true,
+        });
+        if (!result?.value) {
+          await sleep(1000);
+        } else {
+          isSuccess = true;
+        }
+        retryCount++;
+      }
+      // const confirmedTx = await connection.confirmTransaction(
+      //   {
+      //     blockhash,
+      //     lastValidBlockHeight,
+      //     signature,
+      //   },
+      //   'confirmed',
+      // );
+      console.log('result: ', result);
+      console.log('retryCount: ', retryCount);
+      if (result?.value?.confirmationStatus !== 'confirmed') {
         throw new Error('Transaction fail!');
       }
       return signature;
