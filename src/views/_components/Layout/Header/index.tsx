@@ -3,6 +3,7 @@
 import { Box } from '@chakra-ui/react';
 import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCenter } from '@/components/Flex';
@@ -10,7 +11,6 @@ import { ChipsIcon, LogoIcon, LogoMobileIcon, PlusIcon } from '@/components/Icon
 import { ImageRatio } from '@/components/Image';
 import { LinkCustom } from '@/components/LinkCustom';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
-import useAuth from '@/hooks/useAuth';
 import { useUser } from '@/store/useUserStore';
 import { DepositDialog } from './DepositDialog';
 import { WithdrawDialog } from './WithdrawDialog';
@@ -22,7 +22,6 @@ export const Header = () => {
       setVisible(true);
     },
   });
-  const { logout } = useAuth();
   const user = useUser();
 
   return (
@@ -66,15 +65,17 @@ export const Header = () => {
             <WithdrawDialog />
             <DepositDialog />
           </FlexCenter>
-          <ImageRatio
-            onClick={logout}
-            src="/icons/avatar.png"
-            ratio={1}
-            w={{ base: 9, md: '56px' }}
-            rounded="full"
-            border="4px solid"
-            borderColor="bgMain"
-          />
+          <Link href="/profile">
+            <ImageRatio
+              // onClick={logout}
+              src="/icons/avatar.png"
+              ratio={1}
+              w={{ base: 9, md: '56px' }}
+              rounded="full"
+              border="4px solid"
+              borderColor="bgMain"
+            />
+          </Link>
         </FlexCenter>
       )}
     </FlexCenter>

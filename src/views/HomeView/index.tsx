@@ -130,7 +130,7 @@ export default function HomeView() {
       </FlexCenter>
 
       <Box w="full" overflow="auto" maxH="500px" css={scrollbarStyle} bg="bgGame" color="white" rounded={10}>
-        <Table.Root size="sm" unstyled>
+        <Table.Root size="sm" unstyled w="full">
           <Table.Header>
             <Table.Row bg="unset">
               {['GAME', 'USER', 'TIME', 'BET AMOUNT', 'REWARD PAYMENT'].map((text, i) => (

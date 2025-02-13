@@ -10,5 +10,6 @@ export * from './input-group';
 export * from './popover';
 export * from './provider';
 export * from './radio';
+export * from './select';
 export * from './slider';
 export * from './tooltip';
