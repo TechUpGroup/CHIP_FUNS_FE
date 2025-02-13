@@ -7,6 +7,8 @@ export * from './dialog';
 export * from './drawer';
 export * from './field';
 export * from './input-group';
+export * from './link-button';
+export * from './pagination';
 export * from './popover';
 export * from './provider';
 export * from './radio';

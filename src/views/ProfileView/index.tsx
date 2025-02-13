@@ -210,7 +210,7 @@ export default function ProfileView() {
                       </Box>
                     </Table.Cell>
                     <Table.Cell px={5} pb={6} pt={0}>
-                      <Button h={10} px={2.5} rounded={10} bg="#96F048" color="black">
+                      <Button h={10} px={2.5} rounded={10} bg="#96F048" color="black" disabled>
                         <Flex gap={2.5} align="center">
                           <ReloadIcon w={4} fill="currentcolor" />
                           <Text16 fontWeight={600}>Retry</Text16>

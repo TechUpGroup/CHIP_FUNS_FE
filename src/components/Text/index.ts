@@ -5,6 +5,7 @@ export * from './Text10';
 export * from './Text12';
 export * from './Text14';
 export * from './Text16';
+export * from './Text20';
 export * from './Text24';
 export * from './Text30';
 export * from './Text32';
