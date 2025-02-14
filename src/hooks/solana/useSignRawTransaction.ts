@@ -7,15 +7,30 @@ import { sleep } from '@/utils';
 
 export const useSignRawTransaction = () => {
   const anchorProvider = useAnchorProvider();
-  const { wallet } = useWallet();
+  const { wallet: walletSolana } = useWallet();
   const signRawTransaction = useCallback(
     async (signatureRaw: string) => {
-      if (!wallet?.adapter || !anchorProvider) throw new Error('Provider not found');
-      const { connection } = anchorProvider;
+      if (!anchorProvider) throw new Error('Provider not found');
+      const { wallet, connection } = anchorProvider;
       const decodedTx = Buffer.from(signatureRaw, 'base64');
-      // const versionedTransaction = VersionedTransaction.deserialize(decodedTx);
       const transaction = Transaction.from(decodedTx);
-      const signature = await wallet?.adapter.sendTransaction(transaction, connection);
+      let signature = '';
+      debugger;
+      if (walletSolana?.adapter.name === 'Phantom' && window.phantom?.solana) {
+        const result = await window.phantom.solana.signAndSendTransaction(transaction, {
+          skipPreflight: true,
+          preflightCommitment: 'confirmed',
+          maxRetries: 50,
+        });
+        signature = result.signature;
+      } else {
+        const transactionSigned = await wallet.signTransaction(transaction);
+        signature = await connection.sendRawTransaction(transactionSigned.serialize(), {
+          skipPreflight: true,
+          preflightCommitment: 'confirmed',
+          maxRetries: 50,
+        });
+      }
       let result: RpcResponseAndContext<SignatureStatus | null> | null = null;
       let isSuccess = false;
       let retryCount = 0;
@@ -45,7 +60,7 @@ export const useSignRawTransaction = () => {
       }
       return signature;
     },
-    [wallet, anchorProvider],
+    [anchorProvider, walletSolana],
   );
   return signRawTransaction;
 };
