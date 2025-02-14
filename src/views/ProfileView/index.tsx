@@ -88,13 +88,15 @@ export default function ProfileView() {
   });
 
   return (
-    <FlexCol color="white" w="full" pt={30}>
+    <FlexCol color="white" w="full" pt={{ base: 5, md: 30 }}>
       <FlexCenter gap={2.5}>
         <ProfileIcon />
-        <Text32 fontWeight={700}>PROFILE</Text32>
+        <Text32 fontWeight={700} fontSize={{ base: 24, md: 32 }}>
+          PROFILE
+        </Text32>
       </FlexCenter>
       <Flex gap="18px" flexDir={{ base: 'column', md: 'row' }} pt={5}>
-        <FlexCol py={6} px={2} align="center" bg="#1E2127" rounded={10} w="24%">
+        <FlexCol py={6} px={2} align="center" bg="#1E2127" rounded={10} w={{ base: 'full', md: '24%' }}>
           <ImageRatio src="/icons/avatar.png" ratio={1} w={162} rounded="full" />
           <Text24 fontWeight={700} fontSize={26} pt={2}>
             {address ? formatAddress(address) : 'Not connected'}
@@ -215,8 +217,8 @@ export default function ProfileView() {
                     </Table.Cell>
                     <Table.Cell px={5} pb={6} pt={0}>
                       <Box
-                        w="89px"
-                        fontSize={16}
+                        w={{ base: '75px', md: '89px' }}
+                        fontSize={{ base: 14, md: 16 }}
                         py={2.5}
                         textAlign="center"
                         rounded={10}
@@ -235,12 +237,13 @@ export default function ProfileView() {
                           rounded={10}
                           bg="#96F048"
                           color="black"
+                          fontSize={{ base: 14, md: 16 }}
                           disabled={!isNil(loading)}
                           loading={loading === i}
                           onClick={() => onRetry(item, i)}
                         >
                           <Flex gap={2.5} align="center">
-                            <ReloadIcon w={4} fill="currentcolor" />
+                            <ReloadIcon w={{ base: 3, md: 4 }} fill="currentcolor" />
                             <Text16 fontWeight={600}>Retry</Text16>
                           </Flex>
                         </Button>

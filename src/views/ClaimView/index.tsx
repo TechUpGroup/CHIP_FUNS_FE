@@ -42,7 +42,7 @@ export default function ProfileView() {
   };
 
   return (
-    <FlexCol color="white" w="full" pt={9}>
+    <FlexCol color="white" w="full" pt={{ base: 5, md: 9 }}>
       <FlexCenter justify="space-between" gap={2.5} flexDir={{ base: 'column', md: 'row' }}>
         <FlexCenter gap={2.5}>
           <ClaimIcon />
@@ -98,19 +98,21 @@ export default function ProfileView() {
                   <Box>{dayjs(item.timestamp).format('hh:mm A, DD/MM/YYYY')}</Box>
                 </Table.Cell> */}
                 <Table.Cell px={5} pb={6} pt={0}>
-                  {!item.claimed && (
+                  {item.status && (
                     <Button
-                      h={10}
+                      h={{ base: 8, md: 10 }}
                       px={'27px'}
                       rounded={10}
-                      bg="#96F048"
+                      bg={item.claimed ? 'dark' : '#96F048'}
                       color="black"
                       onClick={() => onClaim(item)}
                       loading={loading === item.token}
-                      disabled={!!loading}
+                      disabled={!!loading || item.claimed}
                     >
                       <Flex gap={2.5} align="center">
-                        <Text16 fontWeight={600}>CLAIM</Text16>
+                        <Text16 fontWeight={600} fontSize={{ base: 14, md: 16 }}>
+                          {item.claimed ? 'CLAIMED' : 'CLAIM'}
+                        </Text16>
                       </Flex>
                     </Button>
                   )}

@@ -61,6 +61,7 @@ export const WithdrawDialog = () => {
         color="green"
         rounded={8}
         px={{ base: 2, md: 13 }}
+        fontSize={{ base: 12, md: 16 }}
         fontWeight={600}
         onClick={onOpen}
       >

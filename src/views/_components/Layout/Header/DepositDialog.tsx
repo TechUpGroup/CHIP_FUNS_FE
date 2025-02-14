@@ -55,7 +55,15 @@ export const DepositDialog = () => {
 
   return (
     <>
-      <Button h={{ base: 6, md: 10 }} bg="green" rounded={8} px={{ base: 2, md: 13 }} fontWeight={600} onClick={onOpen}>
+      <Button
+        h={{ base: 6, md: 10 }}
+        bg="green"
+        rounded={8}
+        px={{ base: 2, md: 13 }}
+        fontSize={{ base: 12, md: 16 }}
+        fontWeight={600}
+        onClick={onOpen}
+      >
         Deposit
       </Button>
       <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)} lazyMount>

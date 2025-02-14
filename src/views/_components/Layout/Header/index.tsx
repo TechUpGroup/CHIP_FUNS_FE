@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import Link from 'next/link';
@@ -32,6 +32,7 @@ export default function HeaderComponent() {
       py={2.5}
       bg="bgGame"
       justify="space-between"
+      gap={1}
     >
       <LinkCustom href="/">
         <LogoIcon hideBelow="md" />
@@ -54,28 +55,41 @@ export default function HeaderComponent() {
           CONNECT WALLET
         </Button>
       ) : (
-        <FlexCenter gap={{ base: 2, md: 4 }}>
+        <FlexCenter gap={{ base: 1, md: 4 }} flex={1} justify="end">
           <Link href="/claim">
             <Text24
               fontWeight={800}
               color="white"
               lineHeight={1}
-              px={6}
-              py={4}
+              px={{ base: 1, md: 6 }}
+              py={{ base: 2, md: 4 }}
               border="2px solid #96F048"
               bg="#15181D"
-              fontSize={20}
+              fontSize={{ base: 14, md: 20 }}
               rounded={10}
             >
               CLAIM
             </Text24>
           </Link>
-          <FlexCenter bg="bgMain" rounded={10} p={2} minW={{ base: 284, md: 420 }} gap={2}>
+          <FlexCenter
+            bg="bgMain"
+            rounded={10}
+            p={{ base: 1, md: 2 }}
+            minW={{ base: 'unset', md: 420 }}
+            flex={{ base: 1, md: 'unset' }}
+            gap={{ base: 1, md: 2 }}
+          >
             <FlexCenter flex={1} gap={2}>
               <ChipsIcon w={{ base: 6, md: 8 }} />
-              <Box fontSize={{ base: 14, md: 20 }} lineHeight={1} fontWeight={800} color="white">
+              <Flex
+                fontSize={{ base: 14, md: 20 }}
+                lineHeight={1}
+                fontWeight={800}
+                color="white"
+                flexDir={{ base: 'column', md: 'row' }}
+              >
                 <Currency value={user?.balance} isWei /> {SYMBOL_TOKEN}
-              </Box>
+              </Flex>
             </FlexCenter>
 
             <WithdrawDialog />
@@ -83,7 +97,6 @@ export default function HeaderComponent() {
           </FlexCenter>
           <Link href="/profile">
             <ImageRatio
-              // onClick={logout}
               src="/icons/avatar.png"
               ratio={1}
               w={{ base: 9, md: '56px' }}
