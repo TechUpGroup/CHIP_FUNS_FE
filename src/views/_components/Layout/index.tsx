@@ -1,10 +1,13 @@
 'use client';
 
+import { lazy, Suspense } from 'react';
 import { FlexCol } from '@/components/Flex';
 import Providers from '@/providers';
 import { scrollbarHiddenStyle } from '@/utils/styles/scrollbar';
 
-import { Header } from './Header';
+// Lazy load the Header component
+const Header = lazy(() => import('./Header'));
+
 import Global from '../Global';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -12,7 +15,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <Providers>
       <Global />
       <FlexCol as="main" h="100dvh" w="100dvw" overflow="auto" css={scrollbarHiddenStyle}>
-        <Header />
+        <Suspense fallback={null}>
+          <Header />
+        </Suspense>
         <FlexCol
           flex={1}
           css={scrollbarHiddenStyle}

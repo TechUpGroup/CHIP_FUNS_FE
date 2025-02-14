@@ -10,13 +10,12 @@ import { FlexCenter } from '@/components/Flex';
 import { ChipsIcon, LogoIcon, LogoMobileIcon, PlusIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { LinkCustom } from '@/components/LinkCustom';
-import { Text24 } from '@/components/Text';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useUser } from '@/store/useUserStore';
 import { DepositDialog } from './DepositDialog';
 import { WithdrawDialog } from './WithdrawDialog';
 
-export const Header = () => {
+export default function HeaderComponent() {
   const { setVisible } = useWalletModal();
   const { buttonState, publicKey } = useWalletMultiButton({
     onSelectWallet() {
@@ -96,4 +95,4 @@ export const Header = () => {
       )}
     </FlexCenter>
   );
-};
+}

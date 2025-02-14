@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Center, createListCollection, Flex, HStack, SimpleGrid, Table } from '@chakra-ui/react';
+import { isNil } from 'lodash';
 import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
@@ -23,13 +24,16 @@ import {
   SelectValueText,
 } from '@/components/ui/select';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
+import { useSignRawTransaction } from '@/hooks/solana/useSignRawTransaction';
 import useAuth from '@/hooks/useAuth';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import useWalletActive from '@/hooks/useWalletActive';
-import { getHistoryAction } from '@/services/histories';
+import { getHistoryAction, IHistory } from '@/services/histories';
 import { formatAddress } from '@/utils/address';
 import dayjs from '@/utils/dayjs';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
+import { toastSuccess } from '@/utils/toast';
+import { toastError } from '@/utils/toast';
 
 const historyOpts = createListCollection({
   items: [
@@ -50,6 +54,22 @@ const statusOpts = createListCollection({
 export default function ProfileView() {
   const { logout } = useAuth();
   const { address } = useWalletActive();
+  const signRawTransaction = useSignRawTransaction();
+  const [loading, setLoading] = useState<number | undefined>(undefined);
+  const onRetry = async (his: IHistory, index: number) => {
+    if (!isNil(loading)) return;
+    try {
+      setLoading(index);
+      await signRawTransaction(his.signature);
+      toastSuccess('Retry success');
+    } catch (error) {
+      console.log(error);
+      toastError('Retry failed', error);
+    } finally {
+      setLoading(undefined);
+    }
+  };
+
   const [type, setType] = useState<string[]>(['all']);
   const [status, setStatus] = useState<string[]>(['all']);
   const [page, setPage] = useState(1);
@@ -66,8 +86,6 @@ export default function ProfileView() {
     enabled: !!address,
     refetchInterval: 5_000,
   });
-
-  console.log(data);
 
   return (
     <FlexCol color="white" w="full" pt={30}>
@@ -211,7 +229,16 @@ export default function ProfileView() {
                     </Table.Cell>
                     <Table.Cell px={5} pb={6} pt={0}>
                       {item.status === 'failed' && (
-                        <Button h={10} px={2.5} rounded={10} bg="#96F048" color="black" disabled>
+                        <Button
+                          h={10}
+                          px={2.5}
+                          rounded={10}
+                          bg="#96F048"
+                          color="black"
+                          disabled={!isNil(loading)}
+                          loading={loading === i}
+                          onClick={() => onRetry(item, i)}
+                        >
                           <Flex gap={2.5} align="center">
                             <ReloadIcon w={4} fill="currentcolor" />
                             <Text16 fontWeight={600}>Retry</Text16>

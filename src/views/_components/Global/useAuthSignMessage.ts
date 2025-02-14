@@ -32,11 +32,6 @@ export function useAuthSignMessage() {
           return;
         }
 
-        // remove below code
-        if (1 === 1) {
-          return;
-        }
-
         try {
           setUser(null);
           const preMessage = `Welcome to chips.fun!
