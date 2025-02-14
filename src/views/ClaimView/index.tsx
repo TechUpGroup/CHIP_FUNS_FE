@@ -1,18 +1,27 @@
 'use client';
 
-import { Box, Center, Flex, HStack, Table } from '@chakra-ui/react';
+import { Box, Flex, Table } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ChipsIcon, ClaimIcon, InfoIcon } from '@/components/Icons';
-import { Text16, Text20, Text32 } from '@/components/Text';
+import { ImageRatio } from '@/components/Image';
+import { Text16, Text32 } from '@/components/Text';
+import {
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTitle,
+  PopoverTrigger,
+  Tooltip,
+} from '@/components/ui';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import { getPartnerList, IPartner, postClaimPartner } from '@/services/partners';
 import { useUser } from '@/store/useUserStore';
 import { formatAddress } from '@/utils/address';
-import dayjs from '@/utils/dayjs';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
 import { toastError } from '@/utils/toast';
 
@@ -48,14 +57,35 @@ export default function ProfileView() {
           <ClaimIcon />
           <Text32 fontWeight={700}>CLAIM</Text32>
         </FlexCenter>
-        <FlexCenter gap={2.5} py={3} px={5} bg="#1E2127" rounded={10}>
-          <InfoIcon />
-          <Text20 color="#8E8E93" fontWeight={700}>
-            The amount of {SYMBOL_TOKEN} claimed is equivalent to the token balance you are holding
-          </Text20>
-        </FlexCenter>
+        <FlexCol align={{ base: 'center', md: 'end' }} gap={2.5}>
+          <Box hideBelow="md">
+            <Tooltip content={`Claim your weekly free CHIPS by holding our partner's tokens`}>
+              <InfoIcon />
+            </Tooltip>
+          </Box>
+          <Box hideFrom="md">
+            <PopoverRoot>
+              <PopoverTrigger asChild>
+                <Button>
+                  <InfoIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverBody>
+                  <PopoverTitle fontWeight="medium">{`Claim your weekly free CHIPS by holding our partner's tokens`}</PopoverTitle>
+                </PopoverBody>
+              </PopoverContent>
+            </PopoverRoot>
+          </Box>
+          <Flex gap={2.5}>
+            {['partner-1', 'partner-2', 'partner-3', 'partner-4', 'partner-5'].map((item, i) => (
+              <ImageRatio key={i} src={`/icons/${item}.png`} ratio={1} w={{ base: 10, md: '60px' }} />
+            ))}
+          </Flex>
+        </FlexCol>
       </FlexCenter>
-      <Box w="full" overflow="auto" maxH="500px" css={scrollbarStyle} bg="bgGame" color="white" rounded={10} mt={5}>
+      <Box w="full" overflow="auto" h="500px" css={scrollbarStyle} bg="bgGame" color="white" rounded={10} mt={5}>
         <Table.Root size="sm" unstyled w="full">
           <Table.Header>
             <Table.Row bg="unset">

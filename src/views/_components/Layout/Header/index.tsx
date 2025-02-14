@@ -63,7 +63,7 @@ export default function HeaderComponent() {
               lineHeight={1}
               px={{ base: 1, md: 6 }}
               py={{ base: 2, md: 4 }}
-              border="2px solid #96F048"
+              // border="2px solid #96F048"
               bg="#15181D"
               fontSize={{ base: 14, md: 20 }}
               rounded={10}
