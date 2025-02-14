@@ -39,7 +39,17 @@ export function useAuthSignMessage() {
 
         try {
           setUser(null);
-          const preMessage = 'Nonce:';
+          const preMessage = `Welcome to chips.fun!
+
+Click to sign in and accept the chips.fun Terms.
+
+This request will not trigger a blockchain transaction or cost any gas fees.
+
+Wallet address:
+${address}
+
+Nonce:
+`;
           const nonce = await getNonce(address);
           const message = preMessage + nonce.nonce;
 
