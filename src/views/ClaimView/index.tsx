@@ -1,80 +1,45 @@
 'use client';
 
-import { Box, Center, createListCollection, Flex, HStack, SimpleGrid, Table } from '@chakra-ui/react';
+import { Box, Center, Flex, HStack, Table } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
-import { FlexBetween, FlexCenter, FlexCol } from '@/components/Flex';
-import {
-  ChipsIcon,
-  ClaimIcon,
-  DepositIcon,
-  HistoryIcon,
-  InfoIcon,
-  ProfileIcon,
-  ReloadIcon,
-  WithdrawIcon,
-} from '@/components/Icons';
-import { ImageRatio } from '@/components/Image';
-import { Text16, Text20, Text24, Text32 } from '@/components/Text';
-import {
-  PaginationItems,
-  PaginationNextTrigger,
-  PaginationPrevTrigger,
-  PaginationRoot,
-} from '@/components/ui/pagination';
-import {
-  SelectContent,
-  SelectItem,
-  SelectLabel,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-} from '@/components/ui/select';
+import { FlexCenter, FlexCol } from '@/components/Flex';
+import { ChipsIcon, ClaimIcon, InfoIcon } from '@/components/Icons';
+import { Text16, Text20, Text32 } from '@/components/Text';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
-import useAuth from '@/hooks/useAuth';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
-import useWalletActive from '@/hooks/useWalletActive';
-import { getHistoryAction } from '@/services/histories';
+import { getPartnerList, IPartner, postClaimPartner } from '@/services/partners';
+import { useUser } from '@/store/useUserStore';
 import { formatAddress } from '@/utils/address';
 import dayjs from '@/utils/dayjs';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
-
-const historyOpts = createListCollection({
-  items: [
-    { label: 'All', value: 'all' },
-    { label: 'Deposit', value: 'deposited' },
-    { label: 'Withdraw', value: 'withdrawn' },
-  ],
-});
-
-const statusOpts = createListCollection({
-  items: [
-    { label: 'All Status', value: 'all' },
-    { label: 'Completed', value: 'completed' },
-    { label: 'Failed', value: 'failed' },
-  ],
-});
+import { toastError } from '@/utils/toast';
 
 export default function ProfileView() {
-  const { logout } = useAuth();
-  const { address } = useWalletActive();
-  const [type, setType] = useState<string[]>(['all']);
-  const [status, setStatus] = useState<string[]>(['all']);
-  const [page, setPage] = useState(1);
+  const user = useUser();
+  const [loading, setLoading] = useState('');
 
-  const { data } = useBaseQuery({
-    queryKey: ['histories', page, type, status],
-    queryFn: () =>
-      getHistoryAction({
-        page,
-        limit: 10,
-        tx_type: type[0] === 'all' ? undefined : (type[0] as any),
-        tx_status: status[0] as any,
-      }),
-    enabled: !!address,
+  const { data, refetch } = useBaseQuery({
+    queryKey: ['getPartnerList'],
+    queryFn: getPartnerList,
+    enabled: !!user,
     refetchInterval: 5_000,
   });
+
+  const onClaim = async (partner: IPartner) => {
+    if (loading) return;
+    try {
+      setLoading(partner.token);
+      await postClaimPartner({ token: partner.token });
+      refetch();
+    } catch (error) {
+      console.log(error);
+      toastError('Claim failed', error);
+    } finally {
+      setLoading('');
+    }
+  };
 
   return (
     <FlexCol color="white" w="full" pt={9}>
@@ -97,7 +62,7 @@ export default function ProfileView() {
               {[
                 { label: 'AMOUNT', minW: 200 },
                 { label: 'TRANSACTION', minW: 180 },
-                { label: 'CLAIM TIME', minW: 240 },
+                // { label: 'CLAIM TIME', minW: 240 },
                 { label: 'ACTION', minW: 180 },
               ].map((e, i) => (
                 <Table.ColumnHeader
@@ -116,52 +81,45 @@ export default function ProfileView() {
             </Table.Row>
           </Table.Header>
           <Table.Body fontSize={{ base: 12, md: 20 }} lineHeight={1} fontWeight={800}>
-            {data?.docs.map((item, i) => (
+            {data?.map((item, i) => (
               <Table.Row key={i} bg="unset">
                 <Table.Cell px={5} pb={6} pt={0}>
                   <FlexCenter gap={1.5}>
                     <ChipsIcon />
                     <Box>
-                      <Currency value={item.amount} isWei /> {SYMBOL_TOKEN}
+                      <Currency value={item.reward} isWei /> {SYMBOL_TOKEN}
                     </Box>
                   </FlexCenter>
                 </Table.Cell>
                 <Table.Cell px={5} pb={6} pt={0}>
-                  <FlexCenter gap={1.5}>
-                    <Box>{item.event === 'deposited' ? 'Deposit' : 'Withdraw'}</Box>
-                  </FlexCenter>
+                  <Box gap={1.5}>{formatAddress(item.token)}</Box>
                 </Table.Cell>
-                <Table.Cell px={5} pb={6} pt={0}>
+                {/* <Table.Cell px={5} pb={6} pt={0}>
                   <Box>{dayjs(item.timestamp).format('hh:mm A, DD/MM/YYYY')}</Box>
-                </Table.Cell>
+                </Table.Cell> */}
                 <Table.Cell px={5} pb={6} pt={0}>
-                  <Button h={10} px={'27px'} rounded={10} bg="#96F048" color="black">
-                    <Flex gap={2.5} align="center">
-                      <Text16 fontWeight={600}>CLAIM</Text16>
-                    </Flex>
-                  </Button>
+                  {!item.claimed && (
+                    <Button
+                      h={10}
+                      px={'27px'}
+                      rounded={10}
+                      bg="#96F048"
+                      color="black"
+                      onClick={() => onClaim(item)}
+                      loading={loading === item.token}
+                      disabled={!!loading}
+                    >
+                      <Flex gap={2.5} align="center">
+                        <Text16 fontWeight={600}>CLAIM</Text16>
+                      </Flex>
+                    </Button>
+                  )}
                 </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table.Root>
       </Box>
-      <Center py={3} mt={2.5}>
-        <PaginationRoot
-          count={data?.totalDocs ?? 0}
-          pageSize={data?.limit}
-          defaultPage={1}
-          onPageChange={(e) => setPage(e.page)}
-          color="white"
-          size="xs"
-        >
-          <HStack>
-            <PaginationPrevTrigger />
-            <PaginationItems />
-            <PaginationNextTrigger />
-          </HStack>
-        </PaginationRoot>
-      </Center>
     </FlexCol>
   );
 }

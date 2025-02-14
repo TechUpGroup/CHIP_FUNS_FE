@@ -75,7 +75,7 @@ export default function ProfileView() {
   const [page, setPage] = useState(1);
 
   const { data } = useBaseQuery({
-    queryKey: ['histories', page, type, status],
+    queryKey: ['getHistoryAction', page, type, status],
     queryFn: () =>
       getHistoryAction({
         page,

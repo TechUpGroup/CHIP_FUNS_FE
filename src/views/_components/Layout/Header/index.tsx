@@ -10,6 +10,7 @@ import { FlexCenter } from '@/components/Flex';
 import { ChipsIcon, LogoIcon, LogoMobileIcon, PlusIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { LinkCustom } from '@/components/LinkCustom';
+import { Text24 } from '@/components/Text';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useUser } from '@/store/useUserStore';
 import { DepositDialog } from './DepositDialog';
@@ -54,7 +55,7 @@ export default function HeaderComponent() {
         </Button>
       ) : (
         <FlexCenter gap={{ base: 2, md: 4 }}>
-          {/* <Link href="/claim">
+          <Link href="/claim">
             <Text24
               fontWeight={800}
               color="white"
@@ -68,7 +69,7 @@ export default function HeaderComponent() {
             >
               CLAIM
             </Text24>
-          </Link> */}
+          </Link>
           <FlexCenter bg="bgMain" rounded={10} p={2} minW={{ base: 284, md: 420 }} gap={2}>
             <FlexCenter flex={1} gap={2}>
               <ChipsIcon w={{ base: 6, md: 8 }} />
