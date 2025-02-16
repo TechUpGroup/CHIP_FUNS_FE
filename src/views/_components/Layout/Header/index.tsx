@@ -1,8 +1,7 @@
 'use client';
 
 import { Flex } from '@chakra-ui/react';
-import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui';
-import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
 import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
@@ -17,12 +16,8 @@ import { DepositDialog } from './DepositDialog';
 import { WithdrawDialog } from './WithdrawDialog';
 
 export default function HeaderComponent() {
-  const { setVisible } = useWalletModal();
-  const { buttonState, publicKey } = useWalletMultiButton({
-    onSelectWallet() {
-      setVisible(true);
-    },
-  });
+  const { open } = useAppKit();
+  const { isConnected } = useAppKitAccount();
   const user = useUser();
 
   return (
@@ -38,11 +33,12 @@ export default function HeaderComponent() {
         <LogoIcon hideBelow="md" />
         <LogoMobileIcon hideFrom="md" />
       </LinkCustom>
-      {!publicKey ? (
+      {!isConnected ? (
         <Button
-          onClick={() => setVisible(true)}
-          disabled={buttonState === 'connected'}
-          loading={buttonState === 'connecting'}
+          onClick={
+            // () => connect('jupiter')
+            () => open({ view: 'Connect' })
+          }
           h={{ base: 8, md: 12 }}
           bg="green"
           px={{ base: 2, md: '26px' }}

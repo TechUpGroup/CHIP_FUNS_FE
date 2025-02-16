@@ -2262,6 +2262,18 @@
     valtio "1.13.2"
     viem ">=2.23.0"
 
+"@reown/appkit-wallet-button@^1.6.8":
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/@reown/appkit-wallet-button/-/appkit-wallet-button-1.6.8.tgz#6bce54647ec5c812f7feea0ed3db61ec987b210b"
+  integrity sha512-rpP5HvLuSZwh/I+Ley+fS5Pwd4BKXdxosTT8ICfSIjT0BOG/mWVmmufQ7vEgs3l2R8WU8pf9iTT6ba6tmza3/g==
+  dependencies:
+    "@reown/appkit-common" "1.6.8"
+    "@reown/appkit-core" "1.6.8"
+    "@reown/appkit-ui" "1.6.8"
+    "@reown/appkit-utils" "1.6.8"
+    lit "3.1.0"
+    valtio "1.13.2"
+
 "@reown/appkit-wallet@1.6.8":
   version "1.6.8"
   resolved "https://registry.yarnpkg.com/@reown/appkit-wallet/-/appkit-wallet-1.6.8.tgz#a661a624845a79213757220d4c6b4dc0acc01c47"

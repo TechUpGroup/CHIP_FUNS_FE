@@ -1,7 +1,6 @@
 'use client';
 
-import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui';
-import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
 import { forwardRef } from 'react';
 import { useSignMessage } from '@/hooks/useSignMessage';
 import { useUser } from '@/store/useUserStore';
@@ -11,24 +10,20 @@ export const ButtonWithAuth = forwardRef<HTMLButtonElement, ButtonBaseProps>(fun
   { children, ...props },
   ref,
 ) {
-  const { setVisible } = useWalletModal();
-  const { buttonState, publicKey } = useWalletMultiButton({
-    onSelectWallet() {
-      setVisible(true);
-    },
-  });
+  const { open } = useAppKit();
+  const { isConnected } = useAppKitAccount();
 
   const { signMessage, loading: loadingSignMessage } = useSignMessage();
   const user = useUser();
 
-  if (!publicKey) {
+  if (!isConnected) {
     return (
       <Button
         ref={ref}
         {...props}
-        onClick={() => setVisible(true)}
-        loading={buttonState === 'connecting'}
-        disabled={buttonState === 'connected'}
+        onClick={() => open({ view: 'Connect' })}
+        // loading={buttonState === 'connecting'}
+        // disabled={buttonState === 'connected'}
       >
         Connect Wallet
       </Button>

@@ -1,4 +1,4 @@
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useDisconnect } from '@reown/appkit/react';
 import { useCallback } from 'react';
 
 import useUserStore from '@/store/useUserStore';
@@ -8,7 +8,7 @@ export class WalletSwitchChainError extends Error {}
 
 const useAuth = () => {
   const setUser = useUserStore((state) => state.setUser);
-  const { disconnect } = useWallet();
+  const { disconnect } = useDisconnect();
 
   const logout = useCallback(async () => {
     try {

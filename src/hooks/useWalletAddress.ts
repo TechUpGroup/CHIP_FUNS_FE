@@ -1,4 +1,4 @@
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useAppKitAccount } from '@reown/appkit/react';
 import { useMemo } from 'react';
 
 import { Network, networks } from '@/enums/network.enum';
@@ -7,12 +7,12 @@ export default function useWalletAddress(): {
   address: string | undefined;
   network: Network | undefined;
 } {
-  const { publicKey } = useWallet();
+  const { address } = useAppKitAccount();
   return useMemo(
     () => ({
-      address: publicKey?.toBase58(),
-      network: publicKey ? networks.solana : undefined,
+      address: address,
+      network: address ? networks.solana : undefined,
     }),
-    [publicKey],
+    [address],
   );
 }

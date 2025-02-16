@@ -25,6 +25,7 @@
     "@next/bundle-analyzer": "^15.1.6",
     "@reown/appkit": "^1.6.8",
     "@reown/appkit-adapter-solana": "^1.6.8",
+    "@reown/appkit-wallet-button": "^1.6.8",
     "@solana/spl-token": "^0.4.12",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",

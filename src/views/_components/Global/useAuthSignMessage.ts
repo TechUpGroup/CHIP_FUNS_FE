@@ -1,6 +1,7 @@
 'use client';
 
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useAppKitProvider } from '@reown/appkit/react';
+import { Provider } from '@reown/appkit-adapter-solana';
 import bs58 from 'bs58';
 import { useEffect, useRef } from 'react';
 
@@ -14,7 +15,7 @@ export function useAuthSignMessage() {
   const loading = useRef<boolean>(false);
 
   const { address } = useWalletAddress();
-  const { signMessage } = useWallet();
+  const { walletProvider } = useAppKitProvider<Provider>('solana');
 
   const { logout } = useAuth();
 
@@ -23,7 +24,7 @@ export function useAuthSignMessage() {
 
   useEffect(() => {
     const updateAuth = async () => {
-      if (loading.current || !address || !signMessage) return;
+      if (loading.current || !address || !walletProvider) return;
       try {
         loading.current = true;
         const findUser = listUser.find((e) => e.user.address.toLowerCase() === address.toLowerCase());
@@ -48,7 +49,7 @@ Nonce:
           const nonce = await getNonce(address);
           const message = preMessage + nonce.nonce;
 
-          const signatureBuffer = await signMessage(new TextEncoder().encode(message));
+          const signatureBuffer = await walletProvider.signMessage(new TextEncoder().encode(message));
           const signature = bs58.encode(signatureBuffer);
           const login = await postLogin(address, signature ?? '', preMessage);
 
@@ -63,7 +64,7 @@ Nonce:
       }
     };
     updateAuth();
-  }, [address, listUser, logout, setUser, signMessage]);
+  }, [address, listUser, logout, setUser, walletProvider]);
 
   return null;
 }
