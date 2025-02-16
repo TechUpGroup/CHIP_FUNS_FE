@@ -7,7 +7,7 @@ import { Currency } from '@/components/Currency';
 import { FlexCenter, FlexCol } from '@/components/Flex';
 import { ChipsIcon, ClaimIcon, InfoIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
-import { Text16, Text32 } from '@/components/Text';
+import { Text16, Text20, Text32 } from '@/components/Text';
 import {
   PopoverArrow,
   PopoverBody,
@@ -21,7 +21,6 @@ import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import { getPartnerList, IPartner, postClaimPartner } from '@/services/partners';
 import { useUser } from '@/store/useUserStore';
-import { formatAddress } from '@/utils/address';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
 import { toastError } from '@/utils/toast';
 
@@ -57,27 +56,33 @@ export default function ProfileView() {
           <ClaimIcon />
           <Text32 fontWeight={700}>CLAIM</Text32>
         </FlexCenter>
+
         <FlexCol align={{ base: 'center', md: 'end' }} gap={2.5}>
-          <Box hideBelow="md">
-            <Tooltip content={`Claim your weekly free CHIPS by holding our partner's tokens`}>
-              <InfoIcon />
-            </Tooltip>
-          </Box>
-          <Box hideFrom="md">
-            <PopoverRoot>
-              <PopoverTrigger asChild>
-                <Button>
-                  <InfoIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverBody>
-                  <PopoverTitle fontWeight="medium">{`Claim your weekly free CHIPS by holding our partner's tokens`}</PopoverTitle>
-                </PopoverBody>
-              </PopoverContent>
-            </PopoverRoot>
-          </Box>
+          <FlexCenter gap={2.5} py={3} px={5} bg="#1E2127" rounded={10}>
+            <Text20 color="#8E8E93" fontWeight={700} fontSize={{ base: 16, md: 20 }}>
+              Claim your weekly free {SYMBOL_TOKEN} by holding our partner{`'`}s tokens.
+            </Text20>
+            <Box hideBelow="md">
+              <Tooltip content={`Your weekly claim amount is equal to your token holding balance.`}>
+                <InfoIcon />
+              </Tooltip>
+            </Box>
+            <Box hideFrom="md">
+              <PopoverRoot>
+                <PopoverTrigger asChild>
+                  <Button>
+                    <InfoIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverBody>
+                    <PopoverTitle fontWeight="medium">{`Your weekly claim amount is equal to your token holding balance.`}</PopoverTitle>
+                  </PopoverBody>
+                </PopoverContent>
+              </PopoverRoot>
+            </Box>
+          </FlexCenter>
           <Flex gap={2.5}>
             {['partner-1', 'partner-2', 'partner-3', 'partner-4', 'partner-5'].map((item, i) => (
               <ImageRatio key={i} src={`/icons/${item}.png`} ratio={1} w={{ base: 10, md: '60px' }} />
@@ -91,8 +96,8 @@ export default function ProfileView() {
             <Table.Row bg="unset">
               {[
                 { label: 'AMOUNT', minW: 200 },
-                { label: 'TRANSACTION', minW: 180 },
-                // { label: 'CLAIM TIME', minW: 240 },
+                { label: 'HOLD TOKEN AMOUNT', minW: 200 },
+                { label: 'HOLD AT / CLAIM AT', minW: 580 },
                 { label: 'ACTION', minW: 180 },
               ].map((e, i) => (
                 <Table.ColumnHeader
@@ -121,12 +126,26 @@ export default function ProfileView() {
                     </Box>
                   </FlexCenter>
                 </Table.Cell>
+
                 <Table.Cell px={5} pb={6} pt={0}>
-                  <Box gap={1.5}>{formatAddress(item.token)}</Box>
+                  <FlexCenter gap={2.5}>
+                    <ImageRatio src={item.image} ratio={1} w={10} rounded="full" />
+                    <Box textTransform="uppercase">
+                      <Currency value={30} suffix={` $${item.name}`} />
+                    </Box>
+                  </FlexCenter>
                 </Table.Cell>
-                {/* <Table.Cell px={5} pb={6} pt={0}>
-                  <Box>{dayjs(item.timestamp).format('hh:mm A, DD/MM/YYYY')}</Box>
-                </Table.Cell> */}
+                <Table.Cell px={5} pb={6} pt={0}>
+                  {/* <FlexCol gap="5px">
+                    <Box pos="relative" h={2} w="full" bg="white" rounded="full">
+                      <Absolute w="50%" rounded="full" bg={true ? '#FF7E00' : '#96F048'} />
+                    </Box>
+                    <FlexBetween gap={2} fontSize={{ base: 12, md: 16 }} fontWeight={700}>
+                      <Box>14:45 PM, 22/12/2024</Box>
+                      <Box>14:45 PM, 22/12/2024</Box>
+                    </FlexBetween>
+                  </FlexCol> */}
+                </Table.Cell>
                 <Table.Cell px={5} pb={6} pt={0}>
                   {item.status && (
                     <Button

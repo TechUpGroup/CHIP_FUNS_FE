@@ -3,8 +3,10 @@ import { axiosInstance } from '@/utils/axios';
 export interface IPartner {
   _id: string;
   token: string;
-  reward: number;
   active: boolean;
+  image: string;
+  name: string;
+  reward: number;
   status: boolean;
   claimed: boolean;
 }
