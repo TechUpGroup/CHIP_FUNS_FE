@@ -8,6 +8,7 @@ import React from 'react';
 import { env } from '@/config';
 
 // 0. Set up Solana Adapter
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const solanaWeb3JsAdapter = new SolanaAdapter({
   wallets: [
     // new PhantomWalletAdapter(),
@@ -25,7 +26,7 @@ const metadata = {
 
 // 3. Create modal
 createAppKit({
-  adapters: [solanaWeb3JsAdapter],
+  // adapters: [solanaWeb3JsAdapter],
   networks: [solana],
   metadata: metadata,
   projectId: env.projectId,
