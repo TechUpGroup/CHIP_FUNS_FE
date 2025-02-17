@@ -106,7 +106,7 @@ export default function ProfileView() {
               {[
                 { label: 'AMOUNT', minW: { base: 150, md: 200 } },
                 { label: 'HOLD TOKEN AMOUNT', minW: { base: 150, md: 200 } },
-                { label: 'HOLD AT / CLAIM AT', minW: { base: 300, md: 580 } },
+                { label: 'PROGRESS', minW: { base: 300, md: 580 } },
                 { label: 'ACTION', minW: { base: 150, md: 180 } },
               ].map((e, i) => (
                 <Table.ColumnHeader

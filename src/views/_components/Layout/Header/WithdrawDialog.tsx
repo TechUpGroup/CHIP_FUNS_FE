@@ -1,6 +1,6 @@
 import { Box, chakra, useDisclosure } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button, ButtonWithAuth } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexCol } from '@/components/Flex';
@@ -16,6 +16,7 @@ import {
 import { onChangeAmount } from '@/constants';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useSignRawTransaction } from '@/hooks/solana/useSignRawTransaction';
+import useWalletAddress from '@/hooks/useWalletAddress';
 import { postUsersWithdraw } from '@/services/user';
 import { useUser } from '@/store/useUserStore';
 import { toastError, toastSuccess } from '@/utils/toast';
@@ -27,6 +28,13 @@ export const WithdrawDialog = () => {
   const signRawTransaction = useSignRawTransaction();
   const { open, onOpen, onClose, setOpen } = useDisclosure();
   const user = useUser();
+  const { address: walletAddress } = useWalletAddress();
+
+  useEffect(() => {
+    if (walletAddress) {
+      setAddress(walletAddress);
+    }
+  }, [walletAddress]);
 
   const onWithdraw = async () => {
     if (loading) return;

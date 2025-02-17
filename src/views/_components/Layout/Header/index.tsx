@@ -9,7 +9,6 @@ import { FlexCenter } from '@/components/Flex';
 import { ChipsIcon, LogoIcon, LogoMobileIcon, PlusIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { LinkCustom } from '@/components/LinkCustom';
-import { Text24 } from '@/components/Text';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useUser } from '@/store/useUserStore';
 import { DepositDialog } from './DepositDialog';
@@ -53,19 +52,18 @@ export default function HeaderComponent() {
       ) : (
         <FlexCenter gap={{ base: 1, md: 4 }} flex={1} justify="end">
           <Link href="/claim">
-            <Text24
-              fontWeight={800}
-              color="white"
-              lineHeight={1}
-              px={{ base: 1, md: 6 }}
-              py={{ base: 2, md: 4 }}
-              // border="2px solid #96F048"
-              bg="#15181D"
-              fontSize={{ base: 14, md: 20 }}
-              rounded={10}
+            <Button
+              h={{ base: 6, md: 10 }}
+              border="1px solid"
+              borderColor="green"
+              color="green"
+              rounded={8}
+              px={{ base: 2, md: 13 }}
+              fontSize={{ base: 12, md: 16 }}
+              fontWeight={600}
             >
               CLAIM
-            </Text24>
+            </Button>
           </Link>
           <FlexCenter
             bg="bgMain"
@@ -93,12 +91,12 @@ export default function HeaderComponent() {
           </FlexCenter>
           <Link href="/profile">
             <ImageRatio
-              src="/icons/avatar.png"
+              src="/icons/avatar-2.png"
               ratio={1}
               w={{ base: 9, md: '56px' }}
               rounded="full"
-              border="4px solid"
-              borderColor="bgMain"
+              border="3px solid"
+              borderColor="#96F048"
             />
           </Link>
         </FlexCenter>

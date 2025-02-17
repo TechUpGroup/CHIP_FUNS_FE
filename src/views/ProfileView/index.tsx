@@ -97,7 +97,7 @@ export default function ProfileView() {
       </FlexCenter>
       <Flex gap="18px" flexDir={{ base: 'column', md: 'row' }} pt={5}>
         <FlexCol py={6} px={2} align="center" bg="#1E2127" rounded={10} w={{ base: 'full', md: '24%' }}>
-          <ImageRatio src="/icons/avatar.png" ratio={1} w={162} rounded="full" />
+          <ImageRatio src="/icons/avatar-2.png" ratio={1} w={162} rounded="full" border="4px solid #96F048" />
           <Text24 fontWeight={700} fontSize={26} pt={2}>
             {address ? formatAddress(address) : 'Not connected'}
           </Text24>
