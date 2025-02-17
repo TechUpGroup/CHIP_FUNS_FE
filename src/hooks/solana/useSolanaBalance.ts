@@ -10,9 +10,9 @@ export const useSolanaBalance = () => {
   const { connection } = useAppKitConnection();
 
   const { data: balance, isLoading: loading } = useQuery({
-    queryKey: ['solana-balance', walletProvider.publicKey],
+    queryKey: ['solana-balance', walletProvider?.publicKey],
     queryFn: async () => {
-      if (walletProvider.publicKey && connection) {
+      if (walletProvider?.publicKey && connection) {
         try {
           const balance = await connection.getBalance(walletProvider.publicKey);
           return balance;
@@ -35,7 +35,7 @@ export const useSolanaBalanceToken = (tokenAddress: PublicKey | string, isToken2
 
   const tokenUserATA = useMemo(
     () =>
-      walletProvider.publicKey
+      walletProvider?.publicKey
         ? getAssociatedTokenAddressSync(
             typeof tokenAddress === 'string' ? new PublicKey(tokenAddress) : tokenAddress,
             walletProvider.publicKey,
@@ -43,7 +43,7 @@ export const useSolanaBalanceToken = (tokenAddress: PublicKey | string, isToken2
             isToken2002 ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID,
           )
         : undefined,
-    [walletProvider.publicKey, tokenAddress, isToken2002],
+    [walletProvider?.publicKey, tokenAddress, isToken2002],
   );
 
   const { data: balance, isLoading: loading } = useQuery({

@@ -21,7 +21,7 @@ export const ButtonWithAuth = forwardRef<HTMLButtonElement, ButtonBaseProps>(fun
       <Button
         ref={ref}
         {...props}
-        onClick={() => open({ view: 'Connect' })}
+        onClick={() => open()}
         // loading={buttonState === 'connecting'}
         // disabled={buttonState === 'connected'}
       >

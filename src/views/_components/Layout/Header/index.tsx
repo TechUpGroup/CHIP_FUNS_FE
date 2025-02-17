@@ -37,7 +37,7 @@ export default function HeaderComponent() {
         <Button
           onClick={
             // () => connect('jupiter')
-            () => open({ view: 'Connect' })
+            () => open()
           }
           h={{ base: 8, md: 12 }}
           bg="green"

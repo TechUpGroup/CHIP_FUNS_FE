@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Center, createListCollection, Flex, HStack, SimpleGrid, Table } from '@chakra-ui/react';
+import { useAppKitAccount } from '@reown/appkit/react';
 import { isNil } from 'lodash';
 import { useState } from 'react';
 import { Button } from '@/components/Button';
@@ -27,7 +28,6 @@ import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useSignRawTransaction } from '@/hooks/solana/useSignRawTransaction';
 import useAuth from '@/hooks/useAuth';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
-import useWalletActive from '@/hooks/useWalletActive';
 import { getHistoryAction, IHistory } from '@/services/histories';
 import { formatAddress } from '@/utils/address';
 import dayjs from '@/utils/dayjs';
@@ -53,7 +53,7 @@ const statusOpts = createListCollection({
 
 export default function ProfileView() {
   const { logout } = useAuth();
-  const { address } = useWalletActive();
+  const { address } = useAppKitAccount();
   const signRawTransaction = useSignRawTransaction();
   const [loading, setLoading] = useState<number | undefined>(undefined);
   const onRetry = async (his: IHistory, index: number) => {
