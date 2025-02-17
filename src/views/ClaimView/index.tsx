@@ -136,18 +136,20 @@ export default function ProfileView() {
                     <FlexCenter gap={1.5}>
                       <ChipsIcon />
                       <Box>
-                        <Currency value={item.balance} isWei /> {SYMBOL_TOKEN}
+                        <Currency value={item.reward} isWei /> {SYMBOL_TOKEN}
                       </Box>
                     </FlexCenter>
                   </Table.Cell>
 
                   <Table.Cell px={5} pb={6} pt={0}>
-                    <FlexCenter gap={2.5}>
-                      <ImageRatio src={item.image} ratio={1} w={10} rounded="full" />
-                      <Box textTransform="uppercase">
-                        <Currency value={30} suffix={` $${item.name}`} />
-                      </Box>
-                    </FlexCenter>
+                    {item.balance > 0 && (
+                      <FlexCenter gap={2.5}>
+                        <ImageRatio src={item.image} ratio={1} w={10} rounded="full" />
+                        <Box textTransform="uppercase">
+                          <Currency value={item.balance} isWei suffix={` $${item.name}`} />
+                        </Box>
+                      </FlexCenter>
+                    )}
                   </Table.Cell>
                   <Table.Cell px={5} pb={6} pt={0}>
                     <FlexCol gap="5px">
