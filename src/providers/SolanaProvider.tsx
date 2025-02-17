@@ -31,9 +31,16 @@ createAppKit({
   projectId: env.projectId,
   includeWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
   featuredWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
-  // features: {
-  //   analytics: true, // Optional - defaults to your Cloud configuration
-  // },
+  allWallets: 'HIDE',
+  enableInjected: true,
+  enableWalletConnect: false,
+  enableCoinbase: false,
+  features: {
+    // analytics: true, // Optional - defaults to your Cloud configuration
+    email: false,
+    socials: false,
+    allWallets: false,
+  },
 });
 
 export const SolanaProvider = ({ children }: React.PropsWithChildren) => {
