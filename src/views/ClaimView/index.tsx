@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Flex, Table } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Absolute } from '@/components/Absolute';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
@@ -37,6 +37,10 @@ export default function ProfileView() {
     enabled: !!user,
     refetchInterval: 5_000,
   });
+
+  const partnerList = useMemo(() => {
+    return data?.filter((item) => item.balance > 0);
+  }, [data]);
 
   const onClaim = async (partner: IPartner) => {
     if (loading) return;
@@ -121,7 +125,7 @@ export default function ProfileView() {
             </Table.Row>
           </Table.Header>
           <Table.Body fontSize={{ base: 12, md: 20 }} lineHeight={1} fontWeight={800}>
-            {data?.map((item, i) => {
+            {partnerList?.map((item, i) => {
               let progess = 0;
               if (item.holdAt) {
                 const diff = currentTime - item.holdAt;
@@ -142,27 +146,23 @@ export default function ProfileView() {
                   </Table.Cell>
 
                   <Table.Cell px={5} pb={6} pt={0}>
-                    {item.balance > 0 && (
-                      <FlexCenter gap={2.5}>
-                        <ImageRatio src={item.image} ratio={1} w={10} rounded="full" />
-                        <Box textTransform="uppercase">
-                          <Currency value={item.balance} isWei suffix={` $${item.name}`} />
-                        </Box>
-                      </FlexCenter>
-                    )}
+                    <FlexCenter gap={2.5}>
+                      <ImageRatio src={item.image} ratio={1} w={10} rounded="full" />
+                      <Box textTransform="uppercase">
+                        <Currency value={item.balance} isWei suffix={` $${item.name}`} />
+                      </Box>
+                    </FlexCenter>
                   </Table.Cell>
                   <Table.Cell px={5} pb={6} pt={0}>
-                    {item.balance > 0 && (
-                      <FlexCol gap="5px">
-                        <Box pos="relative" h={2} w="full" bg="white" rounded="full">
-                          <Absolute w={`${progess}%`} rounded="full" bg={progess === 100 ? '#96F048' : '#FF7E00'} />
-                        </Box>
-                        <FlexBetween gap={2} fontSize={{ base: 12, md: 16 }} fontWeight={700}>
-                          <Box>{!!item.holdAt && dayjs(item.holdAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
-                          <Box>{!!item.claimedAt && dayjs(item.claimedAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
-                        </FlexBetween>
-                      </FlexCol>
-                    )}
+                    <FlexCol gap="5px">
+                      <Box pos="relative" h={2} w="full" bg="white" rounded="full">
+                        <Absolute w={`${progess}%`} rounded="full" bg={progess === 100 ? '#96F048' : '#FF7E00'} />
+                      </Box>
+                      <FlexBetween gap={2} fontSize={{ base: 12, md: 16 }} fontWeight={700}>
+                        <Box>{!!item.holdAt && dayjs(item.holdAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
+                        <Box>{!!item.claimedAt && dayjs(item.claimedAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
+                      </FlexBetween>
+                    </FlexCol>
                   </Table.Cell>
                   <Table.Cell px={5} pb={6} pt={0}>
                     {item.status && (
