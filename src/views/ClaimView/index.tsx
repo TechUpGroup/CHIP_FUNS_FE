@@ -103,7 +103,6 @@ export default function ProfileView() {
                 { label: 'AMOUNT', minW: 200 },
                 { label: 'HOLD TOKEN AMOUNT', minW: 200 },
                 { label: 'HOLD AT / CLAIM AT', minW: 580 },
-                { label: 'BALANCE', minW: 200 },
                 { label: 'ACTION', minW: 180 },
               ].map((e, i) => (
                 <Table.ColumnHeader
@@ -137,7 +136,7 @@ export default function ProfileView() {
                     <FlexCenter gap={1.5}>
                       <ChipsIcon />
                       <Box>
-                        <Currency value={item.reward} isWei /> {SYMBOL_TOKEN}
+                        <Currency value={item.balance} isWei /> {SYMBOL_TOKEN}
                       </Box>
                     </FlexCenter>
                   </Table.Cell>
@@ -160,14 +159,6 @@ export default function ProfileView() {
                         <Box>{!!item.claimedAt && dayjs(item.claimedAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
                       </FlexBetween>
                     </FlexCol>
-                  </Table.Cell>
-                  <Table.Cell px={5} pb={6} pt={0}>
-                    <FlexCenter gap={1.5}>
-                      <ChipsIcon />
-                      <Box>
-                        <Currency value={item.balance} isWei /> {SYMBOL_TOKEN}
-                      </Box>
-                    </FlexCenter>
                   </Table.Cell>
                   <Table.Cell px={5} pb={6} pt={0}>
                     {item.status && (
