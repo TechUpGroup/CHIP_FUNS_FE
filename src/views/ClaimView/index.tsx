@@ -152,15 +152,17 @@ export default function ProfileView() {
                     )}
                   </Table.Cell>
                   <Table.Cell px={5} pb={6} pt={0}>
-                    <FlexCol gap="5px">
-                      <Box pos="relative" h={2} w="full" bg="white" rounded="full">
-                        <Absolute w={`${progess}%`} rounded="full" bg={true ? '#FF7E00' : '#96F048'} />
-                      </Box>
-                      <FlexBetween gap={2} fontSize={{ base: 12, md: 16 }} fontWeight={700}>
-                        <Box>{!!item.holdAt && dayjs(item.holdAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
-                        <Box>{!!item.claimedAt && dayjs(item.claimedAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
-                      </FlexBetween>
-                    </FlexCol>
+                    {item.balance > 0 && (
+                      <FlexCol gap="5px">
+                        <Box pos="relative" h={2} w="full" bg="white" rounded="full">
+                          <Absolute w={`${progess}%`} rounded="full" bg={progess === 100 ? '#96F048' : '#FF7E00'} />
+                        </Box>
+                        <FlexBetween gap={2} fontSize={{ base: 12, md: 16 }} fontWeight={700}>
+                          <Box>{!!item.holdAt && dayjs(item.holdAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
+                          <Box>{!!item.claimedAt && dayjs(item.claimedAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
+                        </FlexBetween>
+                      </FlexCol>
+                    )}
                   </Table.Cell>
                   <Table.Cell px={5} pb={6} pt={0}>
                     {item.status && (
