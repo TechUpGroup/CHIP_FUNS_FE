@@ -2,15 +2,18 @@
 
 import { solana } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
+import { SolanaAdapter } from '@reown/appkit-adapter-solana/react';
+// import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import React from 'react';
 import { env } from '@/config';
 
 // 0. Set up Solana Adapter
-// const solanaWeb3JsAdapter = new SolanaAdapter({
-//   wallets: [
-//     new PhantomWalletAdapter(), new SolflareWalletAdapter()
-//   ],
-// });
+const solanaWeb3JsAdapter = new SolanaAdapter({
+  wallets: [
+    // new PhantomWalletAdapter(),
+    // , new SolflareWalletAdapter()
+  ],
+});
 
 // 2. Create a metadata object - optional
 const metadata = {
@@ -22,11 +25,12 @@ const metadata = {
 
 // 3. Create modal
 createAppKit({
-  // adapters: [solanaWeb3JsAdapter],
+  adapters: [solanaWeb3JsAdapter],
   networks: [solana],
   metadata: metadata,
   projectId: env.projectId,
   includeWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
+  featuredWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
   // features: {
   //   analytics: true, // Optional - defaults to your Cloud configuration
   // },

@@ -1,10 +1,9 @@
 'use client';
 
-import { useAppKitProvider } from '@reown/appkit/react';
-import { Provider } from '@reown/appkit-adapter-solana';
 import bs58 from 'bs58';
 import { useEffect, useRef } from 'react';
 
+import { useAppKitSolanaProvider } from '@/hooks/solana/useAppKitSolanaProvider';
 import useAuth from '@/hooks/useAuth';
 import useWalletAddress from '@/hooks/useWalletAddress';
 import { getNonce, postLogin } from '@/services/api';
@@ -15,7 +14,7 @@ export function useAuthSignMessage() {
   const loading = useRef<boolean>(false);
 
   const { address } = useWalletAddress();
-  const { walletProvider } = useAppKitProvider<Provider>('solana');
+  const { walletProvider } = useAppKitSolanaProvider();
 
   const { logout } = useAuth();
 

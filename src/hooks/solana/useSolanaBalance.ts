@@ -1,20 +1,20 @@
-import { useAppKitAccount } from '@reown/appkit/react';
 import { useAppKitConnection } from '@reown/appkit-adapter-solana/react';
 import { getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { PublicKey } from '@solana/web3.js';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { useAppKitSolanaProvider } from './useAppKitSolanaProvider';
 
 export const useSolanaBalance = () => {
-  const { address } = useAppKitAccount();
+  const { walletProvider } = useAppKitSolanaProvider();
   const { connection } = useAppKitConnection();
 
   const { data: balance, isLoading: loading } = useQuery({
-    queryKey: ['solana-balance', address],
+    queryKey: ['solana-balance', walletProvider.publicKey],
     queryFn: async () => {
-      if (address) {
+      if (walletProvider.publicKey && connection) {
         try {
-          const balance = await connection?.getBalance(new PublicKey(address));
+          const balance = await connection.getBalance(walletProvider.publicKey);
           return balance;
         } catch {
           return null;
@@ -30,20 +30,20 @@ export const useSolanaBalance = () => {
 };
 
 export const useSolanaBalanceToken = (tokenAddress: PublicKey | string, isToken2002?: boolean) => {
-  const { address } = useAppKitAccount();
+  const { walletProvider } = useAppKitSolanaProvider();
   const { connection } = useAppKitConnection();
 
   const tokenUserATA = useMemo(
     () =>
-      address
+      walletProvider.publicKey
         ? getAssociatedTokenAddressSync(
             typeof tokenAddress === 'string' ? new PublicKey(tokenAddress) : tokenAddress,
-            new PublicKey(address),
+            walletProvider.publicKey,
             undefined,
             isToken2002 ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID,
           )
         : undefined,
-    [address, tokenAddress, isToken2002],
+    [walletProvider.publicKey, tokenAddress, isToken2002],
   );
 
   const { data: balance, isLoading: loading } = useQuery({

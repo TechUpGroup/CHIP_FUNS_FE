@@ -1,3 +1,3 @@
 export enum StorageStoreName {
-  USER = 'user-storage-chip-funs',
+  USER = 'user-storage-chip-funs-reown',
 }

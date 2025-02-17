@@ -1,36 +1,25 @@
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useAppKitConnection } from '@reown/appkit-adapter-solana/react';
 import { RpcResponseAndContext, SignatureStatus, Transaction } from '@solana/web3.js';
 import { useCallback } from 'react';
 
-import { useAnchorProvider } from '@/hooks/solana/useAnchorProvider';
 import { sleep } from '@/utils';
+import { useAppKitSolanaProvider } from './useAppKitSolanaProvider';
 
 export const useSignRawTransaction = () => {
-  const anchorProvider = useAnchorProvider();
-  const { wallet: walletSolana } = useWallet();
+  const { walletProvider } = useAppKitSolanaProvider();
+  const { connection } = useAppKitConnection();
+
   const signRawTransaction = useCallback(
     async (signatureRaw: string) => {
-      if (!anchorProvider) throw new Error('Provider not found');
-      const { wallet, connection } = anchorProvider;
+      if (!connection || !walletProvider) throw new Error('Provider not found');
       const decodedTx = Buffer.from(signatureRaw, 'base64');
       const transaction = Transaction.from(decodedTx);
-      let signature = '';
-      debugger;
-      if (walletSolana?.adapter.name === 'Phantom' && window.phantom?.solana) {
-        const result = await window.phantom.solana.signAndSendTransaction(transaction, {
-          skipPreflight: true,
-          preflightCommitment: 'confirmed',
-          maxRetries: 50,
-        });
-        signature = result.signature;
-      } else {
-        const transactionSigned = await wallet.signTransaction(transaction);
-        signature = await connection.sendRawTransaction(transactionSigned.serialize(), {
-          skipPreflight: true,
-          preflightCommitment: 'confirmed',
-          maxRetries: 50,
-        });
-      }
+
+      const signature = await walletProvider.signAndSendTransaction(transaction, {
+        skipPreflight: true,
+        preflightCommitment: 'confirmed',
+        maxRetries: 50,
+      });
       let result: RpcResponseAndContext<SignatureStatus | null> | null = null;
       let isSuccess = false;
       let retryCount = 0;
@@ -60,7 +49,7 @@ export const useSignRawTransaction = () => {
       }
       return signature;
     },
-    [anchorProvider, walletSolana],
+    [walletProvider, connection],
   );
   return signRawTransaction;
 };

@@ -1,11 +1,10 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
-import { useAppKitProvider } from '@reown/appkit/react';
-import type { Provider } from '@reown/appkit-adapter-solana';
 import { useCallback, useState } from 'react';
 import { getNonce, postLogin } from '@/services/api';
 import { addUserToList } from '@/store/useListUserStore';
 import { useUserShallow } from '@/store/useUserStore';
 import { toastError } from '@/utils/toast';
+import { useAppKitSolanaProvider } from './solana/useAppKitSolanaProvider';
 import useWalletAddress from './useWalletAddress';
 
 export const useSignMessage = () => {
@@ -13,7 +12,7 @@ export const useSignMessage = () => {
   const setUser = useUserShallow((s) => s.setUser);
   const { address } = useWalletAddress();
   // const { signMessage: signMessageWallet } = useWallet();
-  const { walletProvider } = useAppKitProvider<Provider>('solana');
+  const { walletProvider } = useAppKitSolanaProvider();
 
   const signMessage = useCallback(async () => {
     if (loading || !address || !walletProvider.signMessage) return;
