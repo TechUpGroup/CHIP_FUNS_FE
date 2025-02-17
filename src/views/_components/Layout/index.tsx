@@ -1,13 +1,11 @@
 'use client';
 
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { FlexCol } from '@/components/Flex';
 import Providers from '@/providers';
 import { scrollbarHiddenStyle } from '@/utils/styles/scrollbar';
 
-// Lazy load the Header component
-const Header = lazy(() => import('./Header'));
-
+import Header from './Header';
 import Global from '../Global';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {

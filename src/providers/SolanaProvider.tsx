@@ -3,15 +3,15 @@
 import { solana } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { SolanaAdapter } from '@reown/appkit-adapter-solana/react';
-// import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import React from 'react';
+// import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { env } from '@/config';
 
 // 0. Set up Solana Adapter
 const solanaWeb3JsAdapter = new SolanaAdapter({
   wallets: [
     // new PhantomWalletAdapter(),
-    // , new SolflareWalletAdapter()
+    // new SolflareWalletAdapter(),
   ],
 });
 
@@ -32,9 +32,9 @@ createAppKit({
   includeWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
   featuredWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
   allWallets: 'HIDE',
-  enableInjected: true,
   enableWalletConnect: false,
   enableCoinbase: false,
+  enableWalletGuide: false,
   features: {
     // analytics: true, // Optional - defaults to your Cloud configuration
     email: false,
