@@ -128,6 +128,7 @@ export default function ProfileView() {
                 const diff = currentTime - item.holdAt;
                 if (diff > 0) {
                   progess = (diff / (2 * 86_400)) * 100;
+                  progess = progess < 0 ? 0 : progess > 100 ? 100 : progess;
                 }
               }
               return (
