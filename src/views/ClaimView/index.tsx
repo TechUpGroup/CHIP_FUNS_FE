@@ -2,9 +2,10 @@
 
 import { Box, Flex, Table } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Absolute } from '@/components/Absolute';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
-import { FlexCenter, FlexCol } from '@/components/Flex';
+import { FlexBetween, FlexCenter, FlexCol } from '@/components/Flex';
 import { ChipsIcon, ClaimIcon, InfoIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { Text16, Text20, Text32 } from '@/components/Text';
@@ -19,8 +20,10 @@ import {
 } from '@/components/ui';
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
+import { useCurrentTime } from '@/hooks/useCurrentTime';
 import { getPartnerList, IPartner, postClaimPartner } from '@/services/partners';
 import { useUser } from '@/store/useUserStore';
+import dayjs from '@/utils/dayjs';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
 import { toastError } from '@/utils/toast';
 
@@ -48,6 +51,8 @@ export default function ProfileView() {
       setLoading('');
     }
   };
+
+  const currentTime = useCurrentTime();
 
   return (
     <FlexCol color="white" w="full" pt={{ base: 5, md: 9 }}>
@@ -98,6 +103,7 @@ export default function ProfileView() {
                 { label: 'AMOUNT', minW: 200 },
                 { label: 'HOLD TOKEN AMOUNT', minW: 200 },
                 { label: 'HOLD AT / CLAIM AT', minW: 580 },
+                { label: 'BALANCE', minW: 200 },
                 { label: 'ACTION', minW: 180 },
               ].map((e, i) => (
                 <Table.ColumnHeader
@@ -116,58 +122,75 @@ export default function ProfileView() {
             </Table.Row>
           </Table.Header>
           <Table.Body fontSize={{ base: 12, md: 20 }} lineHeight={1} fontWeight={800}>
-            {data?.map((item, i) => (
-              <Table.Row key={i} bg="unset">
-                <Table.Cell px={5} pb={6} pt={0}>
-                  <FlexCenter gap={1.5}>
-                    <ChipsIcon />
-                    <Box>
-                      <Currency value={item.reward} isWei /> {SYMBOL_TOKEN}
-                    </Box>
-                  </FlexCenter>
-                </Table.Cell>
+            {data?.map((item, i) => {
+              let progess = 0;
+              if (item.holdAt) {
+                const diff = currentTime - item.holdAt;
+                if (diff > 0) {
+                  progess = (diff / (2 * 86_400)) * 100;
+                }
+              }
+              return (
+                <Table.Row key={i} bg="unset">
+                  <Table.Cell px={5} pb={6} pt={0}>
+                    <FlexCenter gap={1.5}>
+                      <ChipsIcon />
+                      <Box>
+                        <Currency value={item.reward} isWei /> {SYMBOL_TOKEN}
+                      </Box>
+                    </FlexCenter>
+                  </Table.Cell>
 
-                <Table.Cell px={5} pb={6} pt={0}>
-                  <FlexCenter gap={2.5}>
-                    <ImageRatio src={item.image} ratio={1} w={10} rounded="full" />
-                    <Box textTransform="uppercase">
-                      <Currency value={30} suffix={` $${item.name}`} />
-                    </Box>
-                  </FlexCenter>
-                </Table.Cell>
-                <Table.Cell px={5} pb={6} pt={0}>
-                  {/* <FlexCol gap="5px">
-                    <Box pos="relative" h={2} w="full" bg="white" rounded="full">
-                      <Absolute w="50%" rounded="full" bg={true ? '#FF7E00' : '#96F048'} />
-                    </Box>
-                    <FlexBetween gap={2} fontSize={{ base: 12, md: 16 }} fontWeight={700}>
-                      <Box>14:45 PM, 22/12/2024</Box>
-                      <Box>14:45 PM, 22/12/2024</Box>
-                    </FlexBetween>
-                  </FlexCol> */}
-                </Table.Cell>
-                <Table.Cell px={5} pb={6} pt={0}>
-                  {item.status && (
-                    <Button
-                      h={{ base: 8, md: 10 }}
-                      px={'27px'}
-                      rounded={10}
-                      bg={item.claimed ? 'dark' : '#96F048'}
-                      color="black"
-                      onClick={() => onClaim(item)}
-                      loading={loading === item.token}
-                      disabled={!!loading || item.claimed}
-                    >
-                      <Flex gap={2.5} align="center">
-                        <Text16 fontWeight={600} fontSize={{ base: 14, md: 16 }}>
-                          {item.claimed ? 'CLAIMED' : 'CLAIM'}
-                        </Text16>
-                      </Flex>
-                    </Button>
-                  )}
-                </Table.Cell>
-              </Table.Row>
-            ))}
+                  <Table.Cell px={5} pb={6} pt={0}>
+                    <FlexCenter gap={2.5}>
+                      <ImageRatio src={item.image} ratio={1} w={10} rounded="full" />
+                      <Box textTransform="uppercase">
+                        <Currency value={30} suffix={` $${item.name}`} />
+                      </Box>
+                    </FlexCenter>
+                  </Table.Cell>
+                  <Table.Cell px={5} pb={6} pt={0}>
+                    <FlexCol gap="5px">
+                      <Box pos="relative" h={2} w="full" bg="white" rounded="full">
+                        <Absolute w={`${progess}%`} rounded="full" bg={true ? '#FF7E00' : '#96F048'} />
+                      </Box>
+                      <FlexBetween gap={2} fontSize={{ base: 12, md: 16 }} fontWeight={700}>
+                        <Box>{!!item.holdAt && dayjs(item.holdAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
+                        <Box>{!!item.claimedAt && dayjs(item.claimedAt * 1000).format('HH:mm DD/MM/YYYY')}</Box>
+                      </FlexBetween>
+                    </FlexCol>
+                  </Table.Cell>
+                  <Table.Cell px={5} pb={6} pt={0}>
+                    <FlexCenter gap={1.5}>
+                      <ChipsIcon />
+                      <Box>
+                        <Currency value={item.balance} isWei /> {SYMBOL_TOKEN}
+                      </Box>
+                    </FlexCenter>
+                  </Table.Cell>
+                  <Table.Cell px={5} pb={6} pt={0}>
+                    {item.status && (
+                      <Button
+                        h={{ base: 8, md: 10 }}
+                        px={'27px'}
+                        rounded={10}
+                        bg={item.claimed ? 'dark' : '#96F048'}
+                        color="black"
+                        onClick={() => onClaim(item)}
+                        loading={loading === item.token}
+                        disabled={!!loading || item.claimed}
+                      >
+                        <Flex gap={2.5} align="center">
+                          <Text16 fontWeight={600} fontSize={{ base: 14, md: 16 }}>
+                            {item.claimed ? 'CLAIMED' : 'CLAIM'}
+                          </Text16>
+                        </Flex>
+                      </Button>
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table.Root>
       </Box>

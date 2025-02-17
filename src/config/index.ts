@@ -6,4 +6,5 @@ export const env = {
   address: {
     token: '8zs9HZswm7oCzB6Nbs3KdVv9UuQ1LTgYpZ518KnExxJK',
   },
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID ?? '',
 };

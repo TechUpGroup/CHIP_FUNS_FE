@@ -1,20 +1,21 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { useCallback, useState } from 'react';
 import { getNonce, postLogin } from '@/services/api';
 import { addUserToList } from '@/store/useListUserStore';
 import { useUserShallow } from '@/store/useUserStore';
 import { toastError } from '@/utils/toast';
+import { useAppKitSolanaProvider } from './solana/useAppKitSolanaProvider';
 import useWalletAddress from './useWalletAddress';
 
 export const useSignMessage = () => {
   const [loading, setLoading] = useState(false);
   const setUser = useUserShallow((s) => s.setUser);
   const { address } = useWalletAddress();
-  const { signMessage: signMessageWallet } = useWallet();
+  // const { signMessage: signMessageWallet } = useWallet();
+  const { walletProvider } = useAppKitSolanaProvider();
 
   const signMessage = useCallback(async () => {
-    if (loading || !address || !signMessageWallet) return;
+    if (loading || !address || !walletProvider.signMessage) return;
     try {
       setLoading(true);
       setUser(null);
@@ -32,7 +33,7 @@ Nonce:
       const nonce = await getNonce(address);
       const message = preMessage + nonce.nonce;
 
-      const signatureBuffer = await signMessageWallet(new TextEncoder().encode(message));
+      const signatureBuffer = await walletProvider.signMessage(new TextEncoder().encode(message));
       const signature = bs58.encode(signatureBuffer);
       const login = await postLogin(address, signature ?? '', preMessage);
 
@@ -44,7 +45,7 @@ Nonce:
     } finally {
       setLoading(false);
     }
-  }, [address, loading, setUser, signMessageWallet]);
+  }, [address, loading, setUser, walletProvider]);
 
   return { signMessage, loading };
 };
