@@ -6,9 +6,13 @@ export interface IPartner {
   active: boolean;
   image: string;
   name: string;
+  decimal: number;
   reward: number;
   status: boolean;
   claimed: boolean;
+  holdAt?: number;
+  claimedAt?: number;
+  balance: number;
 }
 
 export const getPartnerList = async () => {
