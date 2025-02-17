@@ -20,7 +20,7 @@ export const getPartnerList = async () => {
   return data.data;
 };
 
-export const postClaimPartner = async (body: { token: string }) => {
+export const postClaimPartner = async (body: { id: string; token: string }) => {
   const data = await axiosInstance.post<any>(`/partners/claim`, body);
   return data.data;
 };

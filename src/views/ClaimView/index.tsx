@@ -46,7 +46,7 @@ export default function ProfileView() {
     if (loading) return;
     try {
       setLoading(partner.token);
-      await postClaimPartner({ token: partner.token });
+      await postClaimPartner({ id: partner._id, token: partner.token });
       refetch();
     } catch (error) {
       console.log(error);
@@ -104,10 +104,10 @@ export default function ProfileView() {
           <Table.Header>
             <Table.Row bg="unset">
               {[
-                { label: 'AMOUNT', minW: 200 },
-                { label: 'HOLD TOKEN AMOUNT', minW: 200 },
-                { label: 'HOLD AT / CLAIM AT', minW: 580 },
-                { label: 'ACTION', minW: 180 },
+                { label: 'AMOUNT', minW: { base: 150, md: 200 } },
+                { label: 'HOLD TOKEN AMOUNT', minW: { base: 150, md: 200 } },
+                { label: 'HOLD AT / CLAIM AT', minW: { base: 300, md: 580 } },
+                { label: 'ACTION', minW: { base: 150, md: 180 } },
               ].map((e, i) => (
                 <Table.ColumnHeader
                   key={i}
