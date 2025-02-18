@@ -29,11 +29,11 @@ createAppKit({
   networks: [solana],
   metadata: metadata,
   projectId: env.projectId,
-  includeWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
-  featuredWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
-  allWallets: 'HIDE',
-  enableWalletConnect: false,
-  enableCoinbase: false,
+  // includeWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
+  // featuredWalletIds: ['0ef262ca2a56b88d179c93a21383fee4e135bd7bc6680e5c2356ff8e38301037'],
+  // allWallets: 'HIDE',
+  // enableWalletConnect: false,
+  // enableCoinbase: false,
   enableWalletGuide: false,
   features: {
     // analytics: true, // Optional - defaults to your Cloud configuration
