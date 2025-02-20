@@ -20,6 +20,7 @@ export * from './LogoIcon';
 export * from './LogoMobileIcon';
 export * from './PlusIcon';
 export * from './ProfileIcon';
+export * from './RefreshIcon';
 export * from './ReloadIcon';
 export * from './Toast';
 export * from './TransactionIcon';

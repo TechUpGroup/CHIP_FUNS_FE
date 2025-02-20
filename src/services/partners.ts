@@ -24,3 +24,8 @@ export const postClaimPartner = async (body: { id: string; token: string }) => {
   const data = await axiosInstance.post<any>(`/partners/claim`, body);
   return data.data;
 };
+
+export const refreshPartner = async () => {
+  const data = await axiosInstance.get<any>(`/partners/refresh`);
+  return data.data;
+};

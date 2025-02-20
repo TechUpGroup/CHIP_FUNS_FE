@@ -6,7 +6,7 @@ import { Absolute } from '@/components/Absolute';
 import { Button } from '@/components/Button';
 import { Currency } from '@/components/Currency';
 import { FlexBetween, FlexCenter, FlexCol } from '@/components/Flex';
-import { ChipsIcon, ClaimIcon, InfoIcon } from '@/components/Icons';
+import { ChipsIcon, ClaimIcon, InfoIcon, RefreshIcon } from '@/components/Icons';
 import { ImageRatio } from '@/components/Image';
 import { Text16, Text20, Text32 } from '@/components/Text';
 import {
@@ -21,7 +21,7 @@ import {
 import { SYMBOL_TOKEN } from '@/enums/token.enum';
 import { useBaseQuery } from '@/hooks/useBaseQuery';
 import { useCurrentTime } from '@/hooks/useCurrentTime';
-import { getPartnerList, IPartner, postClaimPartner } from '@/services/partners';
+import { getPartnerList, IPartner, postClaimPartner, refreshPartner } from '@/services/partners';
 import { useUser } from '@/store/useUserStore';
 import dayjs from '@/utils/dayjs';
 import { scrollbarStyle } from '@/utils/styles/scrollbar';
@@ -56,6 +56,21 @@ export default function ProfileView() {
     }
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    if (refreshing) return;
+    try {
+      setRefreshing(true);
+      await refreshPartner();
+      refetch();
+    } catch (error) {
+      console.log(error);
+      toastError('Refresh failed', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const currentTime = useCurrentTime();
 
   return (
@@ -64,6 +79,9 @@ export default function ProfileView() {
         <FlexCenter gap={2.5}>
           <ClaimIcon />
           <Text32 fontWeight={700}>CLAIM</Text32>
+          <Button variant="outline" size="sm" rounded={10} color="white" onClick={onRefresh} loading={refreshing}>
+            <RefreshIcon w={4} />
+          </Button>
         </FlexCenter>
 
         <FlexCol align={{ base: 'center', md: 'end' }} gap={2.5}>
