@@ -111,7 +111,12 @@ export default function ProfileView() {
             </Box>
           </FlexCenter>
           <Flex gap={2.5}>
-            {['partner-1', 'partner-2', 'partner-3', 'partner-4', 'partner-5'].map((item, i) => (
+            {[
+              // 'partner-1',
+              'partner-2',
+              // 'partner-3', 'partner-4',
+              'partner-5',
+            ].map((item, i) => (
               <ImageRatio key={i} src={`/icons/${item}.png`} ratio={1} w={{ base: 10, md: '60px' }} />
             ))}
           </Flex>
