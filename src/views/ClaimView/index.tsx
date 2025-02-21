@@ -87,10 +87,10 @@ export default function ProfileView() {
         <FlexCol align={{ base: 'center', md: 'end' }} gap={2.5}>
           <FlexCenter gap={2.5} py={3} px={5} bg="#1E2127" rounded={10}>
             <Text20 color="#8E8E93" fontWeight={700} fontSize={{ base: 16, md: 20 }}>
-              Claim your weekly free {SYMBOL_TOKEN} by holding our partner{`'`}s tokens.
+              Claim your daily free {SYMBOL_TOKEN} by holding our partner{`'`}s tokens.
             </Text20>
             <Box hideBelow="md">
-              <Tooltip content={`Your weekly claim amount is equal to your token holding balance.`}>
+              <Tooltip content={`Your daily claim amount is equal to your token holding balance.`}>
                 <InfoIcon />
               </Tooltip>
             </Box>
@@ -104,7 +104,7 @@ export default function ProfileView() {
                 <PopoverContent>
                   <PopoverArrow />
                   <PopoverBody>
-                    <PopoverTitle fontWeight="medium">{`Your weekly claim amount is equal to your token holding balance.`}</PopoverTitle>
+                    <PopoverTitle fontWeight="medium">{`Your daily claim amount is equal to your token holding balance.`}</PopoverTitle>
                   </PopoverBody>
                 </PopoverContent>
               </PopoverRoot>
