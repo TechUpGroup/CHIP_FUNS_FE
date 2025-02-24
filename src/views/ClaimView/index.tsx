@@ -114,7 +114,8 @@ export default function ProfileView() {
             {[
               // 'partner-1',
               'partner-2',
-              // 'partner-3', 'partner-4',
+              // 'partner-3',
+              'partner-4',
               'partner-5',
             ].map((item, i) => (
               <ImageRatio key={i} src={`/icons/${item}.png`} ratio={1} w={{ base: 10, md: '60px' }} />
